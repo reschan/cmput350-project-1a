@@ -19,6 +19,7 @@ void DrawContext::DrawText(const std::string &text, int pixelSize, Point2D p, RG
 void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
     sf::CircleShape circle(radius);
     circle.setFillColor(sf::Color::Color(c.r, c.g, c.b));
+    circle.setOrigin({radius, radius});
     circle.setPosition({p.x, p.y});
     mWindow->draw(circle);
 }
