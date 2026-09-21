@@ -10,37 +10,29 @@ struct Point2D {
     float x, y;
     Point2D(float x = 0, float y = 0) : x(x), y(y) {}
     double Distance(const Point2D &other) const {
-        // TODO: write this code
         return std::sqrt((((other.x - x) * (other.x - x)) + ((other.y - y) * (other.y - y))));
     }
     Point2D operator+(const Point2D &other) const {
-        // TODO: write this code
         return Point2D(this->x + other.x, this->y + other.y);
     }
     Point2D operator+(const float &other) const {
-        // TODO: write this code
         return Point2D(this->x + other, this->y + other);
     }
     Point2D operator-(const Point2D &other) const {
-        // TODO: write this code
         return Point2D(this->x - other.x, this->y - other.y);
     }
     Point2D operator-(const float &other) const {
-        // TODO: write this code
         return Point2D(this->x - other, this->y - other);
     }
     Point2D operator*(const float &scalar) const {
-        // TODO: write this code
         return Point2D(this->x * scalar, this->y * scalar);
     }
     Point2D &operator+=(const float &scalar) {
-        // TODO: write this code
         this->x += scalar;
         this->y += scalar;
         return *this;
     }
     Point2D &operator+=(const Point2D &other) {
-        // TODO: write this code
         if (*this != other) {
             this->x += other.x;
             this->y += other.y;
@@ -48,7 +40,6 @@ struct Point2D {
         return *this;
     }
     Point2D &operator-=(const Point2D &other) {
-        // TODO: write this code
         if (*this != other) {
             this->x -= other.x;
             this->y -= other.y;
@@ -63,13 +54,11 @@ struct Point2D {
         }
     }
     Point2D &operator*=(const int &scalar) {
-        // TODO: write this code
         this->x *= scalar;
         this->y *= scalar;
         return *this;
     }
     Point2D &operator/=(const int &scalar) {
-        // TODO: write this code
         this->x /= scalar;
         this->y /= scalar;
         return *this;
@@ -79,15 +68,12 @@ struct Point2D {
         return 0;
     }
     float Dot(Point2D b) const {
-        // TODO: write this code
         return (this->x * b.x)+(this->y * b.y);
     }
     static float Dot(Point2D a, Point2D b) {
-        // TODO: write this code
         return (a.x*b.x)+(a.y*b.y);
     }
     static float Cross(Point2D a, Point2D b) {
-        // TODO: write this code
         // https://allenchou.net/2013/07/cross-product-of-2d-vectors/
         return (a.x*b.y)-(a.y*b.x);
     }
@@ -99,7 +85,6 @@ struct Point2D {
 };
 
 static std::ostream &operator<<(std::ostream &os, const Point2D &p) {
-    // TODO: write this code
     os << "Point: x: ";
     os << p.x;
     os << " y: ";
@@ -118,11 +103,9 @@ struct Line {
     Line(Point2D p1 = {0, 0}, Point2D p2 = {0, 0}) : p1(p1), p2(p2) {}
     Line(float x1, float y1, float x2, float y2) : p1(x1, y1), p2(x2, y2) {}
     float Length() const {
-        // TODO: write this code
         return this->p1.Distance(p2);
     }
     Point2D ClosestPoint(const Point2D &p) const {
-        // TODO: write this code
         float point_x = (this->p2.x - this->p1.x) / Length(); 
         float point_y = (this->p2.y - this->p1.y) / Length(); 
         float p1p_length = ((p2 - p1).Dot(p - p1)) / Length();
@@ -169,7 +152,6 @@ struct Rect {
         : topLeft(center.x - radius, center.y - radius), width(2 * radius), height(2 * radius) {}
 
     Rect &operator|=(const Rect &other) {
-        // TODO: write this code
         this->topLeft.x = std::min(this->topLeft.x, other.topLeft.x);
         this->topLeft.y = std::min(this->topLeft.y, other.topLeft.y);
         this->width = std::max(this->width, other.width);
@@ -177,7 +159,6 @@ struct Rect {
         return *this;
     }
     Rect &operator|=(const Point2D &other) {
-        // TODO: write this code
         this->topLeft.x = std::min(this->topLeft.x, other.x);
         this->topLeft.y = std::min(this->topLeft.y, other.y);
         this->width = std::max(this->width, other.x);
@@ -185,7 +166,6 @@ struct Rect {
         return *this;
     }
     Rect &operator|=(const Line &other) {
-        // TODO: write this code
         this->topLeft.x = std::min(this->topLeft.x, other.p1.x, other.p2.x);
         this->topLeft.y = std::min(this->topLeft.y, other.p1.y, other.p2.y);
         this->width = std::max(this->width, other.p1.x, other.p2.x);
@@ -208,14 +188,12 @@ struct Rect {
         return *this;
     }
     void Inset(int inset) {
-        // TODO: write this code
         this->width -= inset * 2;
         this->height -= inset * 2;
         this->topLeft.x += inset;
         this->topLeft.y += inset;
     }
     bool IsInside(const Point2D &p) const {
-        // TODO: write this code
         if ((this->topLeft.x < p.x < (this->topLeft.x + width)) &&
             (this->topLeft.y < p.y < (this->topLeft.y + height))) {
             return true;
