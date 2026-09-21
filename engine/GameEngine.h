@@ -30,8 +30,14 @@ public:
     void Run();
 
 private:
-    //	std::shared_ptr<sf::RenderWindow> mWindow;
-    //	std::shared_ptr<sf::Font> mFont;
+    std::shared_ptr<sf::RenderWindow> mWindow; // pointer to main window
+    std::shared_ptr<sf::Font> mFont; // pointer to font resource 
+
+    // game object lists
+    std::unique_ptr<std::vector<std::shared_ptr<GameObject>>> mObjectPending; // pointer to game objects
+    std::unique_ptr<std::vector<std::shared_ptr<GameObject>>> mObjects;  // pointer to game objects
+
+    GameContext* context;
 };
 
 }  // namespace CMPUT350
