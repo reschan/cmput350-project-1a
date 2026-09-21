@@ -2,7 +2,7 @@
 #include "GameContext.h"
 #include "GraphicsObject.h"
 #include "CollisionObject.h"
-
+#include <iostream> // debug
 /// @brief
 namespace CMPUT350 {
 #include "FontData.h"
@@ -92,7 +92,7 @@ void GameEngine::Run() {
             
             for (const std::shared_ptr<GameObject>& j : *mObjects) {
                 std::shared_ptr<CollisionObject> obj2 = std::dynamic_pointer_cast<CollisionObject>(j);
-                if (obj2 == nullptr) { continue; }
+                if (obj2 == nullptr || obj1 == obj2) { continue; }
 
                 obj1->CollisionEnter(obj2);
             }
@@ -104,7 +104,7 @@ void GameEngine::Run() {
         }
 
         // Clear window
-        mWindow->clear();
+        mWindow->clear(sf::Color::Black);
 
         // 6. Render background
         for (const std::shared_ptr<GameObject>& i : *mObjects) {
@@ -120,12 +120,13 @@ void GameEngine::Run() {
             if (obj == nullptr) {
                 continue;
             }
-
+            printf("drawing foreground\n");
             obj->RenderForeground(context);
         }
 
         // Actually render to window
         mWindow->display();
+        std::cout << mObjects->size() << std::endl;
     }
 }
 
