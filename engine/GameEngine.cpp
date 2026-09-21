@@ -23,6 +23,7 @@ GameEngine::GameEngine(unsigned int width, unsigned int height, const std::strin
     mObjects.reset(new std::vector<std::shared_ptr<GameObject>>);
 
     // TODO: load resources
+    mFont.reset(new sf::Font);
     if (!mFont->openFromMemory(&_font, _font_len))
     {
     	fprintf(stderr, "WARNING: Font did not load.\n");
