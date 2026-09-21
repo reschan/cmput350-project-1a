@@ -18,9 +18,7 @@ void Enemy::LateUpdate(CMPUT350::GameContext* context)
 {
 }
 
-bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key)
-{
-}
+bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return true; }
 
 void Enemy::RenderBackground(CMPUT350::GameContext* context)
 {
