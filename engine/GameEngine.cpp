@@ -1,6 +1,7 @@
 #include "GameEngine.h"
 #include "GameContext.h"
 #include "GraphicsObject.h"
+#include "CollisionObject.h"
 
 /// @brief
 namespace CMPUT350 {
@@ -84,6 +85,17 @@ void GameEngine::Run() {
         }
 
         // 4. Process collision events
+        for (const std::shared_ptr<GameObject>& i : *mObjects) {
+            std::shared_ptr<CollisionObject> obj1 = std::dynamic_pointer_cast<CollisionObject>(i);
+            if (obj1 == nullptr) { continue; }
+            
+            for (const std::shared_ptr<GameObject>& j : *mObjects) {
+                std::shared_ptr<CollisionObject> obj2 = std::dynamic_pointer_cast<CollisionObject>(j);
+                if (obj2 == nullptr) { continue; }
+
+                obj1->CollisionEnter(obj2);
+            }
+        }
 
         // 5. Late updates
         for (const std::shared_ptr<GameObject>& i : *mObjects) {
@@ -95,12 +107,20 @@ void GameEngine::Run() {
 
         // 6. Render background
         for (const std::shared_ptr<GameObject>& i : *mObjects) {
-            i->RenderBackground(context);
+            std::shared_ptr<GraphicsObject> obj = std::dynamic_pointer_cast<GraphicsObject>(i);
+            if (obj == nullptr) { continue; }
+
+            obj->RenderBackground(context);
         }
 
         // 7. Render foreground
         for (const std::shared_ptr<GameObject>& i : *mObjects) {
-            i->RenderForeground(context);
+            std::shared_ptr<GraphicsObject> obj = std::dynamic_pointer_cast<GraphicsObject>(i);
+            if (obj == nullptr) {
+                continue;
+            }
+
+            obj->RenderForeground(context);
         }
 
         // Actually render to window
