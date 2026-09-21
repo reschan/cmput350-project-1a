@@ -15,8 +15,6 @@ public:
     virtual bool HandleKeyEvent(GameContext *context, char key);
     virtual bool IsAlive() const;
     virtual void Kill();
-    virtual void RenderBackground(GameContext* context) = 0;
-    virtual void RenderForeground(GameContext* context) = 0;
 };
 
 }  // namespace CMPUT350
