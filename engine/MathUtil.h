@@ -165,11 +165,11 @@ struct Rect {
         this->height = std::max(this->height, other.y);
         return *this;
     }
-    Rect &operator|=(const Line &other) {
-        this->topLeft.x = std::min(this->topLeft.x, other.p1.x, other.p2.x);
-        this->topLeft.y = std::min(this->topLeft.y, other.p1.y, other.p2.y);
-        this->width = std::max(this->width, other.p1.x, other.p2.x);
-        this->height = std::max(this->height, other.p1.y, other.p2.y);
+    Rect& operator|=(const Line& other) {
+        this->topLeft.x = std::min({this->topLeft.x, other.p1.x, other.p2.x});
+        this->topLeft.y = std::min({this->topLeft.y, other.p1.y, other.p2.y});
+        this->width = std::max({this->width, other.p1.x, other.p2.x});
+        this->height = std::max({this->height, other.p1.y, other.p2.y});
         return *this;
     }
     Rect &operator&=(const Rect &other) {
@@ -194,8 +194,7 @@ struct Rect {
         this->topLeft.y += inset;
     }
     bool IsInside(const Point2D &p) const {
-        if ((this->topLeft.x < p.x < (this->topLeft.x + width)) &&
-            (this->topLeft.y < p.y < (this->topLeft.y + height))) {
+        if (this->topLeft.x < p.x && p.x < this->topLeft.x + width && this->topLeft.y < p.y && p.y < this->topLeft.y + height) {
             return true;
         } else {
             return false;
