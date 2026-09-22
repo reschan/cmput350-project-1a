@@ -39,7 +39,12 @@ void DrawContext::DrawRect(Rect r, RGBColor c) {
     mWindow->draw(rectangle);
 }
 
-void DrawContext::FrameRect(Rect r, float width, RGBColor c) {}
+void DrawContext::FrameRect(Rect r, float width, RGBColor c) {
+    sf::RectangleShape rectangle({r.width, r.height});
+    rectangle.setOutlineColor(sf::Color::Color(c.r, c.g, c.b));
+    rectangle.setPosition({r.topLeft.x, r.topLeft.y});
+    mWindow->draw(rectangle);
+}
 
 /**
  * @brief Draws a line between two points with a specified width and color.
