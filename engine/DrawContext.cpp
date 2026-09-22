@@ -5,7 +5,15 @@ namespace CMPUT350 {
 DrawContext::DrawContext(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<sf::Font> font)
     : mWindow(window), mFont(font) {}
 
-void DrawContext::DrawCenteredText(const std::string &text, int pixelSize, Point2D p, RGBColor c) {}
+void DrawContext::DrawCenteredText(const std::string &text, int pixelSize, Point2D p, RGBColor c) {
+    // https://stackoverflow.com/questions/27806077/sfml-drawing-centered-text#comment44029433_27806198
+    sf::Text textstring(*mFont);
+    textstring.setString(text);
+    textstring.setCharacterSize(pixelSize);
+    textstring.setFillColor(sf::Color::Color(c.r, c.g, c.b));
+    textstring.setPosition({p.x - textstring.getGlobalBounds().size.x / 2, p.y});
+    mWindow->draw(textstring);
+}
 
 void DrawContext::DrawText(const std::string &text, int pixelSize, Point2D p, RGBColor c) {
     sf::Text textstring(*mFont);
@@ -46,11 +54,21 @@ void DrawContext::FrameRect(Rect r, float width, RGBColor c) {}
  * relative to the world offset and rendered onto the associated window.
  */
 void DrawContext::DrawLine(Point2D from, Point2D to, float width, RGBColor c) {
+    float length = Line(from, to).Length();
+    float fromx_1 = from.x - (width / 2) * ((to.y - from.y) / length);
+    float fromy_1 = from.y + (width / 2) * ((to.x - from.x) / length);
+    float fromx_2 = from.x + (width / 2) * ((to.y - from.y) / length);
+    float fromy_2 = from.y - (width / 2) * ((to.x - from.x) / length);
+    float tox_1 = to.x - (width / 2) * ((to.y - from.y) / length);
+    float toy_1 = to.y + (width / 2) * ((to.x - from.x) / length);
+    float tox_2 = to.x + (width / 2) * ((to.y - from.y) / length);
+    float toy_2 = to.y - (width / 2) * ((to.x - from.x) / length);
     sf::ConvexShape line;
-    line.setPointCount(2);
-    line.setPoint(0, {from.x, from.y});
-    line.setPoint(1, {to.x, to.y});
-    line.setOutlineThickness(width);
+    line.setPointCount(4);
+    line.setPoint(0, {fromx_1, fromy_1});
+    line.setPoint(1, {tox_1, toy_1});
+    line.setPoint(2, {tox_2, toy_2});
+    line.setPoint(3, {fromx_2, fromy_2});
     line.setFillColor(sf::Color::Color(c.r, c.g, c.b));
     line.setPosition({from.x, from.y});
     mWindow->draw(line);
