@@ -70,7 +70,6 @@ void DrawContext::DrawLine(Point2D from, Point2D to, float width, RGBColor c) {
     line.setPoint(2, {tox_2, toy_2});
     line.setPoint(3, {fromx_2, fromy_2});
     line.setFillColor(sf::Color::Color(c.r, c.g, c.b));
-    line.setPosition({from.x, from.y});
     mWindow->draw(line);
 }
 
