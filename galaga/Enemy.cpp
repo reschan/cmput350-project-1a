@@ -1,13 +1,13 @@
 #include "Enemy.h"
 #include "Bullet.h"
 
-Enemy::Enemy(CMPUT350::Point2D loc)
-{
-    // TODO: Update code
+Enemy::Enemy(CMPUT350::Point2D loc) { 
+    this->center = loc; 
 }
 
-void Enemy::Initialize(CMPUT350::GameContext* context)
-{
+void Enemy::Initialize(CMPUT350::GameContext* context) {
+    this->width = 40;
+    this->height = 40;
 }
 
 void Enemy::Update(CMPUT350::GameContext* context)
@@ -20,16 +20,22 @@ void Enemy::LateUpdate(CMPUT350::GameContext* context)
 
 bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return true; }
 
-void Enemy::RenderBackground(CMPUT350::GameContext* context)
-{
-}
+// leaving empty because enemies won't ever need to be in the background?
+void Enemy::RenderBackground(CMPUT350::GameContext* context) {}
 
 void Enemy::RenderForeground(CMPUT350::GameContext* context)
-{
+{ context->ScreenContext->DrawRect({this->center, this->width, this->height}, CMPUT350::Colors::red);  // enemy red for now? 
 }
 
 void Enemy::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj)
 {
+    std::shared_ptr<Bullet> bullet = std::dynamic_pointer_cast<Bullet>(obj);
+    // handling enemy bullet collision only? 
+    if (bullet != nullptr) {
+        if (bullet->IsPlayerBullet()) {
+            
+        }
+    }
 }
 
 void Enemy::Kill()
