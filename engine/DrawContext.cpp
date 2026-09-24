@@ -35,7 +35,6 @@ void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
 void DrawContext::DrawRect(Rect r, RGBColor c) {
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setFillColor(sf::Color(c.r, c.g, c.b));
-    rectangle.setOrigin({rectangle.getLocalBounds().size.x/2, rectangle.getLocalBounds().size.y / 2}); // enemy specifies location should be center but not player? 
     rectangle.setPosition({r.topLeft.x, r.topLeft.y});
     mWindow->draw(rectangle);
 }

@@ -205,6 +205,14 @@ struct Rect {
 
 static std::ostream &operator<<(std::ostream &os, const Rect &l) {
     // TODO: write this code
+    os << "Rect center x: ";
+    os << l.topLeft.x;
+    os << " y: ";
+    os << l.topLeft.y;
+    os << ", width: ";
+    os << l.width;
+    os << " height: ";
+    os << l.height;
     return os;
 }
 
