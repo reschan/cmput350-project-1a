@@ -30,7 +30,7 @@ GameEngine::GameEngine(unsigned int width, unsigned int height, const std::strin
     }
 
     // create context
-    context = new GameContext();
+    context.reset(new GameContext());
     context->mEngineView = this;
     context->ScreenContext = new DrawContext(mWindow, mFont);
 }
@@ -38,7 +38,7 @@ GameEngine::GameEngine(unsigned int width, unsigned int height, const std::strin
 GameEngine::~GameEngine() {
     // TODO: Cleanup resources
     delete context->ScreenContext;
-    delete context;
+
     for (int i = 0; i < mObjects->size(); i++) {
         mObjects->erase(mObjects->begin() + i);
     }
@@ -71,7 +71,7 @@ void GameEngine::Run() {
 
         // 1. Activate and initialize any objects added during the last frame
         for (int i = 0; i < mObjectPending->size(); i++) {
-            mObjectPending->at(i)->Initialize(context); // calls initialize
+            mObjectPending->at(i)->Initialize(context.get()); // calls initialize
             mObjects->push_back(mObjectPending->at(i)); // add to live objects
             mObjectPending->erase(mObjectPending->begin() + i); // remove from pending
         }
@@ -81,7 +81,10 @@ void GameEngine::Run() {
             if (const auto* keyPressed = event->getIf<sf::Event::TextEntered>()) {
                 if (keyPressed->unicode < 128) {
                     for (const std::shared_ptr<GameObject>& i : *mObjects) {
-                        i->HandleKeyEvent(context, static_cast<char>(keyPressed->unicode));  // invoke event update every objects
+                        i->HandleKeyEvent(
+                            context.get(),
+                            static_cast<char>(
+                                keyPressed->unicode));  // invoke event update every objects
                     }
                 }
             }
@@ -90,7 +93,7 @@ void GameEngine::Run() {
 
         // 3. Update game objects
         for (const std::shared_ptr<GameObject>& i : *mObjects) {
-            i->Update(context); // invoke update every objects
+            i->Update(context.get());  // invoke update every objects
         }
 
         // 4. Process collision events
@@ -108,7 +111,7 @@ void GameEngine::Run() {
 
         // 5. Late updates
         for (const std::shared_ptr<GameObject>& i : *mObjects) {
-            i->LateUpdate(context);  // invoke late update every objects
+            i->LateUpdate(context.get());  // invoke late update every objects
         }
 
         // Clear window
@@ -119,7 +122,7 @@ void GameEngine::Run() {
             std::shared_ptr<GraphicsObject> obj = std::dynamic_pointer_cast<GraphicsObject>(i);
             if (obj == nullptr) { continue; }
 
-            obj->RenderBackground(context);
+            obj->RenderBackground(context.get());
         }
 
         // 7. Render foreground
@@ -129,7 +132,7 @@ void GameEngine::Run() {
                 continue;
             }
             //printf("drawing foreground\n");
-            obj->RenderForeground(context);
+            obj->RenderForeground(context.get());
         }
 
         // Actually render to window
