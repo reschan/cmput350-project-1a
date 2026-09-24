@@ -10,7 +10,7 @@ void DrawContext::DrawCenteredText(const std::string &text, int pixelSize, Point
     sf::Text textstring(*mFont);
     textstring.setString(text);
     textstring.setCharacterSize(pixelSize);
-    textstring.setFillColor(sf::Color::Color(c.r, c.g, c.b));
+    textstring.setFillColor(sf::Color(c.r, c.g, c.b));
     textstring.setPosition({p.x - textstring.getGlobalBounds().size.x / 2, p.y});
     mWindow->draw(textstring);
 }
@@ -19,14 +19,14 @@ void DrawContext::DrawText(const std::string &text, int pixelSize, Point2D p, RG
     sf::Text textstring(*mFont);
     textstring.setString(text);
     textstring.setCharacterSize(pixelSize);
-    textstring.setFillColor(sf::Color::Color(c.r, c.g, c.b));
+    textstring.setFillColor(sf::Color(c.r, c.g, c.b));
     textstring.setPosition({p.x, p.y});
     mWindow->draw(textstring);
 }
 
 void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
     sf::CircleShape circle(radius);
-    circle.setFillColor(sf::Color::Color(c.r, c.g, c.b));
+    circle.setFillColor(sf::Color(c.r, c.g, c.b));
     circle.setOrigin({radius, radius});
     circle.setPosition({p.x, p.y});
     mWindow->draw(circle);
@@ -34,7 +34,7 @@ void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
 
 void DrawContext::DrawRect(Rect r, RGBColor c) {
     sf::RectangleShape rectangle({r.width, r.height});
-    rectangle.setFillColor(sf::Color::Color(c.r, c.g, c.b));
+    rectangle.setFillColor(sf::Color(c.r, c.g, c.b));
     rectangle.setOrigin({rectangle.getLocalBounds().size.x/2, rectangle.getLocalBounds().size.y / 2}); // enemy specifies location should be center but not player? 
     rectangle.setPosition({r.topLeft.x, r.topLeft.y});
     mWindow->draw(rectangle);
@@ -42,7 +42,7 @@ void DrawContext::DrawRect(Rect r, RGBColor c) {
 
 void DrawContext::FrameRect(Rect r, float width, RGBColor c) {
     sf::RectangleShape rectangle({r.width, r.height});
-    rectangle.setOutlineColor(sf::Color::Color(c.r, c.g, c.b));
+    rectangle.setOutlineColor(sf::Color(c.r, c.g, c.b));
     rectangle.setPosition({r.topLeft.x, r.topLeft.y});
     mWindow->draw(rectangle);
 }
@@ -75,7 +75,7 @@ void DrawContext::DrawLine(Point2D from, Point2D to, float width, RGBColor c) {
     line.setPoint(1, {tox_1, toy_1});
     line.setPoint(2, {tox_2, toy_2});
     line.setPoint(3, {fromx_2, fromy_2});
-    line.setFillColor(sf::Color::Color(c.r, c.g, c.b));
+    line.setFillColor(sf::Color(c.r, c.g, c.b));
     mWindow->draw(line);
 }
 
