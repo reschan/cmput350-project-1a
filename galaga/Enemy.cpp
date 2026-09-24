@@ -24,7 +24,7 @@ bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return tr
 void Enemy::RenderBackground(CMPUT350::GameContext* context) {}
 
 void Enemy::RenderForeground(CMPUT350::GameContext* context)
-{ context->ScreenContext->DrawRect({this->center, this->width, this->height}, CMPUT350::Colors::red);  // enemy red for now? 
+{ context->ScreenContext->DrawRect({this->center, this->width, this->height}, CMPUT350::Colors::magenta);  // enemy magenta for now? 
 }
 
 void Enemy::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj)

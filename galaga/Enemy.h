@@ -28,8 +28,8 @@ public:
 
 private: 
     CMPUT350::Point2D center;
-    float width;
-    float height;
+    int width;
+    int height;
 };
 
 
