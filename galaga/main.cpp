@@ -113,9 +113,14 @@ std::mt19937 Ball::gen(rd());
 
 int main()
 {
-    CMPUT350::GameEngine engine(1024, 768, "Ball Simulation");
+    /* CMPUT350::GameEngine engine(1024, 768, "Ball Simulation");
     engine.AddGameObject(std::make_shared<Ball>(100));
-    engine.AddGameObject(std::make_shared<Ball>(50));
+    engine.AddGameObject(std::make_shared<Ball>(50)); */
+    CMPUT350::GameEngine engine(768, 1024, "CMake SFML Project");
+    auto player = std::make_shared<Player>(CMPUT350::Point2D(768 / 2, 900));
+    auto enemy1 = std::make_shared<Enemy>(CMPUT350::Point2D(768 / 2 - 100, 100));
+    engine.AddGameObject(player);
+    engine.AddGameObject(enemy1);
     engine.Run();
     return 0;
 }
