@@ -47,9 +47,7 @@ GameEngine::~GameEngine() {
         mObjectPending->erase(mObjectPending->begin() + i);
     }
     
-    
     mWindow->close();
-
 }
 
 void GameEngine::AddGameObject(std::shared_ptr<GameObject> gameObject) {
