@@ -42,6 +42,8 @@ void DrawContext::DrawRect(Rect r, RGBColor c) {
 void DrawContext::FrameRect(Rect r, float width, RGBColor c) {
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setOutlineColor(sf::Color(c.r, c.g, c.b));
+    rectangle.setFillColor(sf::Color::Transparent);
+    rectangle.setOutlineThickness(width);
     rectangle.setPosition({r.topLeft.x, r.topLeft.y});
     mWindow->draw(rectangle);
 }
