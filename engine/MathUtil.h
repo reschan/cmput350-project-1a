@@ -168,6 +168,13 @@ struct Rect {
         return *this;
     }
     Rect &operator|=(const Point2D &other) {
+        if (this->height <= 0 || this->width <= 0) {
+            this->topLeft.x = other.x;
+            this->topLeft.y = other.y;
+            return *this;
+        } else if (other.x <= 0 || other.y <= 0) {
+            return *this;
+        }
         this->topLeft.x = std::min(this->topLeft.x, other.x);
         this->topLeft.y = std::min(this->topLeft.y, other.y);
         this->width = std::max(this->width, other.x);
@@ -182,10 +189,18 @@ struct Rect {
         return *this;
     }
     Rect &operator&=(const Rect &other) {
+        if (this->height <= 0 || this->width <= 0) {
+            *this = other;
+            return *this;
+        } else if (other.height <= 0 || other.width <= 0) {
+            return *this;
+        }
+        float temp_x = std::min(this->topLeft.x + this->width, other.topLeft.x + other.width);
+        float temp_y = std::min(this->topLeft.y + this->height, other.topLeft.y + other.height);
         this->topLeft.x = std::max(this->topLeft.x, other.topLeft.x);
         this->topLeft.y = std::max(this->topLeft.y, other.topLeft.y);
-        this->width = std::min(this->width, other.width);
-        this->height = std::min(this->height, other.height);
+        this->width = temp_x - this->topLeft.x;
+        this->height = temp_y - this->topLeft.y;
         return *this;
     }
     Rect &operator+=(const Point2D &other) {
