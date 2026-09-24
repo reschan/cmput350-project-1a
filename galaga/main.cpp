@@ -113,14 +113,23 @@ std::mt19937 Ball::gen(rd());
 
 int main()
 {
-    /* CMPUT350::GameEngine engine(1024, 768, "Ball Simulation");
-    engine.AddGameObject(std::make_shared<Ball>(100));
-    engine.AddGameObject(std::make_shared<Ball>(50)); */
-    CMPUT350::GameEngine engine(768, 1024, "CMake SFML Project");
-    auto player = std::make_shared<Player>(CMPUT350::Point2D(768 / 2, 900));
-    auto enemy1 = std::make_shared<Enemy>(CMPUT350::Point2D(768 / 2 - 100, 100));
-    engine.AddGameObject(player);
-    engine.AddGameObject(enemy1);
-    engine.Run();
+    bool mBallSsample = true;
+
+    if (mBallSsample) {
+        CMPUT350::GameEngine engine(1024, 768, "Ball Simulation");
+        engine.AddGameObject(std::make_shared<Ball>(100));
+        engine.AddGameObject(std::make_shared<Ball>(50));
+        engine.Run();
+    } else {
+        CMPUT350::GameEngine engine(768, 1024, "Galaga");
+        auto player = std::make_shared<Player>(CMPUT350::Point2D(768 / 2, 900));
+        engine.AddGameObject(player);
+        engine.AddGameObject(std::make_shared<Stars>(250, CMPUT350::Rect(0, 0, 768, 1024)));
+        for (int x = 0; x < 4; x++) {
+            auto enemy = std::make_shared<Enemy>(CMPUT350::Point2D(100 + x * 200, 100));
+            engine.AddGameObject(enemy);
+        }
+        engine.Run();
+    }
     return 0;
 }
