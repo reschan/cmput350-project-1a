@@ -38,10 +38,16 @@ void Player::LateUpdate(CMPUT350::GameContext* context)
 
 bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) { 
     if (key == 'a') {
-        this->center.x -= 1;
+        this->body.topLeft.x -= 1;
+        this->right_rect.topLeft.x -= 1;
+        this->left_rect.topLeft.x -= 1;
+        this->top_rect.topLeft.x -= 1;
         return true;
     } else if (key == 'd') {
-        this->center.x += 1;
+        this->body.topLeft.x += 1;
+        this->right_rect.topLeft.x += 1;
+        this->left_rect.topLeft.x += 1;
+        this->top_rect.topLeft.x += 1;
         return true;
     } else if (key == ' ') {
         std::cout << "bullet shot placeholder" << std::endl;

@@ -81,10 +81,7 @@ void GameEngine::Run() {
             if (const auto* keyPressed = event->getIf<sf::Event::TextEntered>()) {
                 if (keyPressed->unicode < 128) {
                     for (const std::shared_ptr<GameObject>& i : *mObjects) {
-                        i->HandleKeyEvent(
-                            context.get(),
-                            static_cast<char>(
-                                keyPressed->unicode));  // invoke event update every objects
+                        i->HandleKeyEvent(context.get(), static_cast<char>(keyPressed->unicode));  // invoke event update every objects
                     }
                 }
             }
