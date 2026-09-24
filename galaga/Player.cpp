@@ -32,10 +32,7 @@ void Player::Initialize(CMPUT350::GameContext* context) {
     this->right_rect = CMPUT350::Rect({this->topLeft.x + side_rect_x_offset + tl_center_adjustment, this->topLeft.y + side_rect_y_offset}, side_rect_width, side_rect_height);
 }
 
-void Player::Update(CMPUT350::GameContext* context) {
-    /* GetBounds();
-    context->ScreenContext->FrameRect(this->bounds, 2, CMPUT350::Colors::yellow); */
-}
+void Player::Update(CMPUT350::GameContext* context) { GetBounds(); }
 
 void Player::LateUpdate(CMPUT350::GameContext* context)
 {
@@ -63,6 +60,7 @@ bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) {
 }
 
 void Player::RenderBackground(CMPUT350::GameContext* context) {
+    context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
     context->ScreenContext->DrawRect(this->body, CMPUT350::Colors::white);
 }
 
@@ -89,9 +87,11 @@ bool Player::IsAlive() const
 
 const CMPUT350::Rect& Player::GetBounds()
 {
-    // TODO: Update code
-    static CMPUT350::Rect sBounds(0, 0, 0, 0);
-    this->bounds = sBounds; //|= this->body |= this->top_rect |= this->left_rect |= this->right_rect;
+    this->bounds = CMPUT350::Rect({0, 0}, 0, 0);
+    this->bounds |= this->body;
+    this->bounds |= this->top_rect;
+    this->bounds |= this->left_rect;
+    this->bounds |= this->right_rect;
     // std::cout << this->bounds << std::endl;
-    return this->bounds;
+    return this->bounds; // saving in class in case needed for drawing 
 }
