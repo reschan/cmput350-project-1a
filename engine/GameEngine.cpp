@@ -120,13 +120,13 @@ void GameEngine::Run() {
             if (obj == nullptr) {
                 continue;
             }
-            printf("drawing foreground\n");
+            //printf("drawing foreground\n");
             obj->RenderForeground(context);
         }
 
         // Actually render to window
         mWindow->display();
-        std::cout << mObjects->size() << std::endl;
+        //std::cout << mObjects->size() << std::endl;
     }
 }
 
