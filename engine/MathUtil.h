@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 
 namespace CMPUT350 {
 
