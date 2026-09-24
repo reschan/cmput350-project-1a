@@ -25,6 +25,19 @@ public:
     void CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj) override;
     const CMPUT350::Rect& GetBounds() override;
 
+private:
+    CMPUT350::Point2D center;
+    int width = 40;
+    int height = 40;
+    int side_rect_width;
+    int side_rect_height;
+    int top_rect_width;
+    int top_rect_height;
+    int body_width;
+    int body_height;
+    int side_rect_x_offset;
+    int side_rect_y_offset;
+    int top_rect_offset;
 };
 
 #endif
