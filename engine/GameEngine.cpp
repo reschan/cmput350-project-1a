@@ -37,6 +37,15 @@ GameEngine::GameEngine(unsigned int width, unsigned int height, const std::strin
 
 GameEngine::~GameEngine() {
     // TODO: Cleanup resources
+    delete context->ScreenContext;
+    delete context;
+    for (int i = 0; i < mObjects->size(); i++) {
+        mObjects->erase(mObjects->begin() + i);
+    }
+    
+    for (int i = 0; i < mObjectPending->size(); i++) {
+        mObjectPending->erase(mObjectPending->begin() + i);
+    }
     
     
     mWindow->close();
@@ -78,6 +87,7 @@ void GameEngine::Run() {
                     }
                 }
             }
+            if (event->is<sf::Event::Closed>()) mWindow->close();
         }
 
         // 3. Update game objects
