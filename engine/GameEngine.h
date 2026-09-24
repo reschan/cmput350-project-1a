@@ -37,7 +37,8 @@ private:
     std::unique_ptr<std::vector<std::shared_ptr<GameObject>>> mObjectPending; // pointer to game objects
     std::unique_ptr<std::vector<std::shared_ptr<GameObject>>> mObjects;  // pointer to game objects
 
-    GameContext* context;
+    //GameContext* context;
+    std::unique_ptr<GameContext> context;
 };
 
 }  // namespace CMPUT350

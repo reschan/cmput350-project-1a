@@ -30,6 +30,7 @@ private:
     CMPUT350::Point2D center;
     int width;
     int height;
+    bool isAlive;
 };
 
 

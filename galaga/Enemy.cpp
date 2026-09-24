@@ -8,10 +8,12 @@ Enemy::Enemy(CMPUT350::Point2D loc) {
 void Enemy::Initialize(CMPUT350::GameContext* context) {
     this->width = 40;
     this->height = 40;
+    this->isAlive = true;
 }
 
 void Enemy::Update(CMPUT350::GameContext* context)
 {
+
 }
 
 void Enemy::LateUpdate(CMPUT350::GameContext* context)
@@ -45,7 +47,7 @@ void Enemy::Kill()
 bool Enemy::IsAlive() const
 {
     // TODO: Update code
-    return true;
+    return isAlive;
 }
 
 const CMPUT350::Rect& Enemy::GetBounds()
