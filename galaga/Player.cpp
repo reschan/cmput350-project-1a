@@ -3,8 +3,7 @@
 #include "Player.h"
 #include "Bullet.h"
 
-Player::Player(CMPUT350::Point2D loc)
-{
+Player::Player(CMPUT350::Point2D loc) : center(loc) {
     this->topLeft = CMPUT350::Point2D(loc.x - (width / 2), loc.y - (height/2));
 
 }
@@ -53,7 +52,8 @@ bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) {
         this->top_rect.topLeft.x += 1;
         return true;
     } else if (key == ' ') {
-        std::cout << "bullet shot placeholder" << std::endl;
+        auto bullet = std::make_shared<Bullet>(center, center, true);
+        context->mEngineView->AddGameObject(bullet);
         return true;
     }
     return false; 
