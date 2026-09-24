@@ -18,7 +18,7 @@ void Enemy::LateUpdate(CMPUT350::GameContext* context)
 {
 }
 
-bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return true; }
+bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //enemy shouldn't need to respond to keyevent
 
 // leaving empty because enemies won't ever need to be in the background?
 void Enemy::RenderBackground(CMPUT350::GameContext* context) {}
