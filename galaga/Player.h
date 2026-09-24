@@ -27,17 +27,12 @@ public:
 
 private:
     CMPUT350::Point2D center;
+    CMPUT350::Rect body;
+    CMPUT350::Rect top_rect;
+    CMPUT350::Rect left_rect;
+    CMPUT350::Rect right_rect;
     int width = 40;
     int height = 40;
-    int side_rect_width;
-    int side_rect_height;
-    int top_rect_width;
-    int top_rect_height;
-    int body_width;
-    int body_height;
-    int side_rect_x_offset;
-    int side_rect_y_offset;
-    int top_rect_offset;
 };
 
 #endif

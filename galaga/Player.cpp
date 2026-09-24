@@ -8,20 +8,24 @@ Player::Player(CMPUT350::Point2D loc)
     this->center = loc;
 }
 
-void Player::Initialize(CMPUT350::GameContext* context)
-{ 
-    this->side_rect_width = width / 4; 
-    this->side_rect_height = height / 5;
-    this->top_rect_width = width / 5;  
-    this->top_rect_height = (height / 2 + (height / 5)) / 2; 
+void Player::Initialize(CMPUT350::GameContext* context) {
+    int side_rect_width = width / 4;
+    int side_rect_height = height / 5;
+    int top_rect_width = width / 5;
+    int top_rect_height = (height / 2 + (height / 5)) / 2;
     
-    this->body_width = width / 2.5; //2.6
-    this->body_height = height; //1.3
+    int body_width = width / 2.5;
+    int body_height = height; 
 
     // location calcs
-    this->side_rect_x_offset = (this->body_width / 2) + (this->side_rect_width / 2);
-    this->side_rect_y_offset = (height/2) - (2*this->side_rect_height);
-    this->top_rect_offset = 1.5*((this->body_width / 2) + (this->body_height * 0.005));
+    float side_rect_x_offset = (body_width / 2) + (side_rect_width / 2);
+    float side_rect_y_offset = (height/2) - (2*side_rect_height);
+    float top_rect_offset = 1.5*((body_width / 2) + (body_height * 0.005));
+
+    this->body = CMPUT350::Rect(center, width / 2, height / 2);
+    this->top_rect = CMPUT350::Rect({center.x, center.y - top_rect_offset}, top_rect_width, top_rect_height);
+    this->left_rect = CMPUT350::Rect({center.x - side_rect_x_offset, center.y + side_rect_y_offset}, side_rect_width, side_rect_height);
+    this->right_rect = CMPUT350::Rect({center.x + side_rect_x_offset, center.y + side_rect_y_offset}, side_rect_width, side_rect_height);
 }
 
 void Player::Update(CMPUT350::GameContext* context)
@@ -47,14 +51,14 @@ bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) {
 }
 
 void Player::RenderBackground(CMPUT350::GameContext* context) {
-    context->ScreenContext->DrawRect({center, width/2, height/2}, CMPUT350::Colors::white);
+    context->ScreenContext->DrawRect(this->body, CMPUT350::Colors::white);
 }
 
 void Player::RenderForeground(CMPUT350::GameContext* context)
 {
-    context->ScreenContext->DrawRect({{center.x, center.y - top_rect_offset}, top_rect_width, top_rect_height}, CMPUT350::Colors::red);
-    context->ScreenContext->DrawRect({{center.x - side_rect_x_offset, center.y + side_rect_y_offset}, side_rect_width, side_rect_height}, CMPUT350::Colors::red);
-    context->ScreenContext->DrawRect({{center.x + side_rect_x_offset, center.y + side_rect_y_offset}, side_rect_width, side_rect_height}, CMPUT350::Colors::red);
+    context->ScreenContext->DrawRect(this->top_rect, CMPUT350::Colors::red);
+    context->ScreenContext->DrawRect(this->left_rect, CMPUT350::Colors::red);
+    context->ScreenContext->DrawRect(this->right_rect, CMPUT350::Colors::red);
 }
 
 void Player::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj)
@@ -74,6 +78,9 @@ bool Player::IsAlive() const
 const CMPUT350::Rect& Player::GetBounds()
 {
     // TODO: Update code
-    static CMPUT350::Rect sBounds(0, 0, 0, 0);
+    //static CMPUT350::Rect sBounds(0, 0, 0, 0);
+    CMPUT350::Rect sBounds = this->body |= this->top_rect;
+    sBounds |= this->left_rect;
+    sBounds |= this->right_rect;
     return sBounds;
 }
