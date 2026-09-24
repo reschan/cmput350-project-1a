@@ -31,5 +31,7 @@ private:
     CMPUT350::Point2D location;
     CMPUT350::Point2D heading;
     float length;
+    float velocity;
+    bool isAlive;
 };
 #endif // BULLET_H
