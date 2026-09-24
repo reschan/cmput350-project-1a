@@ -32,7 +32,19 @@ void Player::LateUpdate(CMPUT350::GameContext* context)
 {
 }
 
-bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return true; }
+bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) { 
+    if (key == 'a') {
+        this->center.x -= 1;
+        return true;
+    } else if (key == 'd') {
+        this->center.x += 1;
+        return true;
+    } else if (key == ' ') {
+        std::cout << "bullet shot placeholder" << std::endl;
+        return true;
+    }
+    return false; 
+}
 
 void Player::RenderBackground(CMPUT350::GameContext* context) {
     context->ScreenContext->DrawRect({center, width/2, height/2}, CMPUT350::Colors::white);
