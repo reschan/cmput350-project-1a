@@ -8,7 +8,9 @@ Enemy::Enemy(CMPUT350::Point2D loc) {
 void Enemy::Initialize(CMPUT350::GameContext* context) {
     this->width = 40;
     this->height = 40;
+    this->topLeft = CMPUT350::Point2D(this->center.x - (width / 2), this->center.y - (height / 2));
     this->isAlive = true;
+    this->body = CMPUT350::Rect(this->topLeft, this->width, this->height);
 }
 
 void Enemy::Update(CMPUT350::GameContext* context)
@@ -26,7 +28,7 @@ bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return fa
 void Enemy::RenderBackground(CMPUT350::GameContext* context) {}
 
 void Enemy::RenderForeground(CMPUT350::GameContext* context)
-{ context->ScreenContext->DrawRect({this->center, this->width, this->height}, CMPUT350::Colors::magenta);  // enemy magenta for now? 
+{ context->ScreenContext->DrawRect({this->topLeft, this->width, this->height}, CMPUT350::Colors::magenta);  // enemy magenta for now? 
 }
 
 void Enemy::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj)
@@ -53,6 +55,7 @@ bool Enemy::IsAlive() const
 const CMPUT350::Rect& Enemy::GetBounds()
 {
     // TODO: Update code
-    static CMPUT350::Rect sBounds(0, 0, 0, 0);
-    return sBounds;
+    this->bounds = CMPUT350::Rect({0, 0}, 0, 0);
+    this->bounds |= this->body;
+    return this->bounds;
 }

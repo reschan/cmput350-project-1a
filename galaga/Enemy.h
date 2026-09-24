@@ -28,9 +28,12 @@ public:
 
 private: 
     CMPUT350::Point2D center;
+    CMPUT350::Rect bounds;
+    CMPUT350::Point2D topLeft;
     int width;
     int height;
     bool isAlive;
+    CMPUT350::Rect body;
 };
 
 
