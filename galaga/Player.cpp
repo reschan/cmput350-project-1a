@@ -5,7 +5,8 @@
 
 Player::Player(CMPUT350::Point2D loc)
 {
-    this->center = loc;
+    this->topLeft = CMPUT350::Point2D(loc.x - (width / 2), loc.y - (height/2));
+
 }
 
 void Player::Initialize(CMPUT350::GameContext* context) {
@@ -14,22 +15,27 @@ void Player::Initialize(CMPUT350::GameContext* context) {
     int top_rect_width = width / 5;
     int top_rect_height = (height / 2 + (height / 5)) / 2;
     
-    int body_width = width / 2.5;
-    int body_height = height; 
+    int body_width = width / 2;
+    std::cout << side_rect_width << std::endl;
+    int body_height = height / 2; 
 
     // location calcs
-    float side_rect_x_offset = (body_width / 2) + (side_rect_width / 2);
-    float side_rect_y_offset = (height/2) - (2*side_rect_height);
-    float top_rect_offset = 1.5*((body_width / 2) + (body_height * 0.005));
+    float side_rect_x_offset = (body_width / 2) + (side_rect_width / 2) - (side_rect_width / 5);
+    float tl_center_adjustment = (side_rect_width) + (side_rect_width / 2);
+    float side_rect_y_offset = (height/2) - (2*side_rect_height) + (side_rect_height / 2) + (side_rect_height / 4);
+    float top_rect_x_offset = (body_width - top_rect_width)/2 + (top_rect_width) + (top_rect_width / 4) ;
+    float top_rect_y_offset = 1.5*((body_width / 2) + (body_height * 0.005)) - (top_rect_height/4);
+    float body_x_offset = body_width / 2;
 
-    this->body = CMPUT350::Rect(center, width / 2, height / 2);
-    this->top_rect = CMPUT350::Rect({center.x, center.y - top_rect_offset}, top_rect_width, top_rect_height);
-    this->left_rect = CMPUT350::Rect({center.x - side_rect_x_offset, center.y + side_rect_y_offset}, side_rect_width, side_rect_height);
-    this->right_rect = CMPUT350::Rect({center.x + side_rect_x_offset, center.y + side_rect_y_offset}, side_rect_width, side_rect_height);
+    this->body = CMPUT350::Rect({this->topLeft.x + body_x_offset, this->topLeft.y}, body_width, body_height);
+    this->top_rect = CMPUT350::Rect({this->topLeft.x + top_rect_x_offset, this->topLeft.y - top_rect_y_offset}, top_rect_width, top_rect_height);
+    this->left_rect = CMPUT350::Rect({this->topLeft.x - side_rect_x_offset + tl_center_adjustment, this->topLeft.y + side_rect_y_offset}, side_rect_width, side_rect_height);
+    this->right_rect = CMPUT350::Rect({this->topLeft.x + side_rect_x_offset + tl_center_adjustment, this->topLeft.y + side_rect_y_offset}, side_rect_width, side_rect_height);
 }
 
-void Player::Update(CMPUT350::GameContext* context)
-{
+void Player::Update(CMPUT350::GameContext* context) {
+    /* GetBounds();
+    context->ScreenContext->FrameRect(this->bounds, 2, CMPUT350::Colors::yellow); */
 }
 
 void Player::LateUpdate(CMPUT350::GameContext* context)
@@ -84,9 +90,8 @@ bool Player::IsAlive() const
 const CMPUT350::Rect& Player::GetBounds()
 {
     // TODO: Update code
-    //static CMPUT350::Rect sBounds(0, 0, 0, 0);
-    CMPUT350::Rect sBounds = this->body |= this->top_rect;
-    sBounds |= this->left_rect;
-    sBounds |= this->right_rect;
-    return sBounds;
+    static CMPUT350::Rect sBounds(0, 0, 0, 0);
+    this->bounds = sBounds; //|= this->body |= this->top_rect |= this->left_rect |= this->right_rect;
+    // std::cout << this->bounds << std::endl;
+    return this->bounds;
 }
