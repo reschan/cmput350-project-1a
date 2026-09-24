@@ -22,7 +22,7 @@ void Bullet::LateUpdate(CMPUT350::GameContext* context)
 {
 }
 
-bool Bullet::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return true; }
+bool Bullet::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //bullet shouldn't need to respond to keyevent
 
 void Bullet::RenderBackground(CMPUT350::GameContext* context)
 {
