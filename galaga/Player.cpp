@@ -11,7 +11,7 @@ Player::Player(CMPUT350::Point2D loc)
 void Player::Initialize(CMPUT350::GameContext* context)
 { 
     this->side_rect_width = width / 4; 
-    this->side_rect_height = height / 10;
+    this->side_rect_height = height / 5;
     this->top_rect_width = width / 5;  
     this->top_rect_height = (height / 2 + (height / 5)) / 2; 
     
@@ -20,7 +20,7 @@ void Player::Initialize(CMPUT350::GameContext* context)
 
     // location calcs
     this->side_rect_x_offset = (this->body_width / 2) + (this->side_rect_width / 2);
-    this->side_rect_y_offset = (height/2) - (3.5*this->side_rect_height);
+    this->side_rect_y_offset = (height/2) - (2*this->side_rect_height);
     this->top_rect_offset = 1.5*((this->body_width / 2) + (this->body_height * 0.005));
 }
 
