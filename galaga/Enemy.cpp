@@ -14,9 +14,7 @@ void Enemy::Initialize(CMPUT350::GameContext* context) {
 }
 
 void Enemy::Update(CMPUT350::GameContext* context)
-{
-
-}
+{ GetBounds(); }
 
 void Enemy::LateUpdate(CMPUT350::GameContext* context)
 {
@@ -24,8 +22,9 @@ void Enemy::LateUpdate(CMPUT350::GameContext* context)
 
 bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //enemy shouldn't need to respond to keyevent
 
-// leaving empty because enemies won't ever need to be in the background?
-void Enemy::RenderBackground(CMPUT350::GameContext* context) {}
+void Enemy::RenderBackground(CMPUT350::GameContext* context) {
+    //context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
+}
 
 void Enemy::RenderForeground(CMPUT350::GameContext* context)
 { context->ScreenContext->DrawRect({this->topLeft, this->width, this->height}, CMPUT350::Colors::magenta);  // enemy magenta for now? 
