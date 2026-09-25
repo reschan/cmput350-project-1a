@@ -171,14 +171,19 @@ struct Rect {
         if (this->height <= 0 || this->width <= 0) {
             this->topLeft.x = other.x;
             this->topLeft.y = other.y;
+            this->width = 0;
+            this->height = 0;
             return *this;
         } else if (other.x <= 0 || other.y <= 0) {
             return *this;
         }
+        float temp_x = std::max(this->topLeft.x + this->width, other.x);
+        float temp_y = std::max(this->topLeft.y + this->height, other.y);
+
         this->topLeft.x = std::min(this->topLeft.x, other.x);
         this->topLeft.y = std::min(this->topLeft.y, other.y);
-        this->width = std::max(this->width, other.x);
-        this->height = std::max(this->height, other.y);
+        this->width = temp_x - this->topLeft.x;
+        this->height = temp_y - this->topLeft.y;
         return *this;
     }
     Rect& operator|=(const Line& other) {
@@ -190,9 +195,12 @@ struct Rect {
     }
     Rect &operator&=(const Rect &other) {
         if (this->height <= 0 || this->width <= 0) {
-            *this = other;
+            this->width = 0;
+            this->height = 0;
             return *this;
         } else if (other.height <= 0 || other.width <= 0) {
+            this->width = 0;
+            this->height = 0;
             return *this;
         }
         float temp_x = std::min(this->topLeft.x + this->width, other.topLeft.x + other.width);
@@ -228,7 +236,7 @@ struct Rect {
 
 static std::ostream &operator<<(std::ostream &os, const Rect &l) {
     // TODO: write this code
-    os << "Rect center x: ";
+    os << "Rect x: ";
     os << l.topLeft.x;
     os << " y: ";
     os << l.topLeft.y;

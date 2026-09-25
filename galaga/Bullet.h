@@ -33,5 +33,7 @@ private:
     float length;
     float velocity;
     bool isAlive;
+    float width;
+    CMPUT350::Rect bounds;
 };
 #endif // BULLET_H
