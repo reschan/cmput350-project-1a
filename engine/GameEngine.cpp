@@ -100,7 +100,7 @@ void GameEngine::Run() {
             
             for (const std::shared_ptr<GameObject>& j : *mObjects) {
                 std::shared_ptr<CollisionObject> obj2 = std::dynamic_pointer_cast<CollisionObject>(j);
-                if (obj2 == nullptr || obj1 == obj2) { continue; }
+                if (obj2 == nullptr || obj1 == obj2) { continue; } // check if its not itself
 
                 obj1->CollisionEnter(obj2);
             }
