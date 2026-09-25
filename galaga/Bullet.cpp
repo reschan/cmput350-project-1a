@@ -21,7 +21,7 @@ void Bullet::Update(CMPUT350::GameContext* context) {
         if (location.x < 0 || location.x > context->ScreenContext->GetWindowWidth() ||
             location.y < 0 || location.y > context->ScreenContext->GetWindowHeight()) {
             this->Kill();
-            std::cout << "kil\n"; 
+            //std::cout << "kil\n"; 
         }
     }
 }

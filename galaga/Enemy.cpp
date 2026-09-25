@@ -38,9 +38,9 @@ void Enemy::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj
         if (bullet->IsPlayerBullet()) {
             CMPUT350::Rect intersection = bounds;
             intersection &= bullet->GetBounds();
-            std::cout << intersection << std::endl;
+            //std::cout << intersection << std::endl;
             if (!(intersection.width <= 0 || intersection.height <= 0)) {
-                std::cout << "triggered" << std::endl;
+                //std::cout << "triggered" << std::endl;
                 bullet->Kill();
             }
         }
