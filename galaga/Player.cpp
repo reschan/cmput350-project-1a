@@ -44,17 +44,26 @@ bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) {
         this->right_rect.topLeft.x -= 1;
         this->left_rect.topLeft.x -= 1;
         this->top_rect.topLeft.x -= 1;
+        this->center.x -= 1;
         return true;
     } else if (key == 'd') {
         this->body.topLeft.x += 1;
         this->right_rect.topLeft.x += 1;
         this->left_rect.topLeft.x += 1;
         this->top_rect.topLeft.x += 1;
+        this->center.x += 1;
         return true;
     } else if (key == ' ') {
-        auto bullet = std::make_shared<Bullet>(center, center, true);
-        context->mEngineView->AddGameObject(bullet);
-        return true;
+        if (tracking_bullet1.expired() || tracking_bullet2.expired()) {
+            auto bullet = std::make_shared<Bullet>(center, center, true);
+            context->mEngineView->AddGameObject(bullet);
+            if (tracking_bullet1.expired()) {
+                tracking_bullet1 = bullet;
+            } else {
+                tracking_bullet2 = bullet;
+            }
+            return true;
+        }
     }
     return false; 
 }
