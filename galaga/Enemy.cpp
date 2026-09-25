@@ -23,7 +23,7 @@ void Enemy::LateUpdate(CMPUT350::GameContext* context)
 bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //enemy shouldn't need to respond to keyevent
 
 void Enemy::RenderBackground(CMPUT350::GameContext* context) {
-    //context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
+    context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
 }
 
 void Enemy::RenderForeground(CMPUT350::GameContext* context)
@@ -36,7 +36,13 @@ void Enemy::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj
     // handling enemy bullet collision only? 
     if (bullet != nullptr) {
         if (bullet->IsPlayerBullet()) {
-            
+            CMPUT350::Rect intersection = bounds;
+            intersection &= bullet->GetBounds();
+            std::cout << intersection << std::endl;
+            if (!(intersection.width <= 0 || intersection.height <= 0)) {
+                std::cout << "triggered" << std::endl;
+                bullet->Kill();
+            }
         }
     }
 }
