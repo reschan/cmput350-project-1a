@@ -43,8 +43,7 @@ void Enemy::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj
 }
 
 void Enemy::Kill()
-{
-}
+{ isAlive = false; }
 
 bool Enemy::IsAlive() const
 {
