@@ -34,7 +34,7 @@ bool Bullet::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return f
 
 void Bullet::RenderBackground(CMPUT350::GameContext* context) 
 {
-    context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
+    //context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
     CMPUT350::Point2D to(location);
     // std::cout << to << std::endl;
     to.y -= length;
