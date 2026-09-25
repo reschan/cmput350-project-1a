@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Bullet.h"
 
-Player::Player(CMPUT350::Point2D loc) : center(loc) {
+Player::Player(CMPUT350::Point2D loc) : center(loc), bullets(2) {
     this->topLeft = CMPUT350::Point2D(loc.x - (width / 2), loc.y - (height/2));
 
 }
@@ -32,7 +32,14 @@ void Player::Initialize(CMPUT350::GameContext* context) {
     this->right_rect = CMPUT350::Rect({this->topLeft.x + side_rect_x_offset + tl_center_adjustment, this->topLeft.y + side_rect_y_offset}, side_rect_width, side_rect_height);
 }
 
-void Player::Update(CMPUT350::GameContext* context) { GetBounds(); }
+void Player::Update(CMPUT350::GameContext* context) { 
+    GetBounds();
+    for (int i = 0; i < tracking_bullet.size(); i++) {
+        if (tracking_bullet[i].expired()) {
+            tracking_bullet.erase(tracking_bullet.begin() + i);
+        }
+    }
+}
 
 void Player::LateUpdate(CMPUT350::GameContext* context)
 {
@@ -54,14 +61,11 @@ bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) {
         this->center.x += 1;
         return true;
     } else if (key == ' ') {
-        if (tracking_bullet1.expired() || tracking_bullet2.expired()) {
+        if (tracking_bullet.size() < bullets) {
             auto bullet = std::make_shared<Bullet>(center, center, true);
             context->mEngineView->AddGameObject(bullet);
-            if (tracking_bullet1.expired()) {
-                tracking_bullet1 = bullet;
-            } else {
-                tracking_bullet2 = bullet;
-            }
+            std::weak_ptr<Bullet> t_bullet = bullet;
+            tracking_bullet.push_back(bullet);
             return true;
         }
     }

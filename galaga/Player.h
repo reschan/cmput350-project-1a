@@ -36,8 +36,10 @@ private:
     CMPUT350::Rect bounds;
     int width = 40;
     int height = 40;
-    std::weak_ptr<Bullet> tracking_bullet1;
-    std::weak_ptr<Bullet> tracking_bullet2;
+
+    std::vector<std::weak_ptr<Bullet>> tracking_bullet;
+    int bullets;
+
     bool isAlive;
 };
 
