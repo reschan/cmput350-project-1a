@@ -15,7 +15,7 @@ void Player::Initialize(CMPUT350::GameContext* context) {
     int top_rect_height = (height / 2 + (height / 5)) / 2;
     
     int body_width = width / 2;
-    std::cout << side_rect_width << std::endl;
+    //std::cout << side_rect_width << std::endl;
     int body_height = height / 2; 
 
     // location calcs

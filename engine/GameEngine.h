@@ -34,11 +34,10 @@ private:
     std::shared_ptr<sf::Font> mFont; // pointer to font resource 
 
     // game object lists
-    std::unique_ptr<std::vector<std::shared_ptr<GameObject>>> mObjectPending; // pointer to game objects
+    std::unique_ptr<std::vector<std::shared_ptr<GameObject>>> mObjectPending; // pointer to pending game objects
     std::unique_ptr<std::vector<std::shared_ptr<GameObject>>> mObjects;  // pointer to game objects
 
-    //GameContext* context;
-    std::unique_ptr<GameContext> context;
+    std::unique_ptr<GameContext> context; // keeps track of game contexts
 };
 
 }  // namespace CMPUT350
