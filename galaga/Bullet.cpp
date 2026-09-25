@@ -2,7 +2,7 @@
 #include "Enemy.h"
 #include <iostream>
 
-Bullet::Bullet(CMPUT350::Point2D location, CMPUT350::Point2D heading, bool player) : location(location), heading(heading), player(player), length(5.0f), velocity(5.0f), width(3.0f) {}
+Bullet::Bullet(CMPUT350::Point2D location, CMPUT350::Point2D heading, bool player) : location(location), heading(heading), player(player), length(20.0f), velocity(25.0f), width(3.0f) {}
 
 bool Bullet::IsPlayerBullet()
 {
@@ -38,7 +38,7 @@ void Bullet::RenderBackground(CMPUT350::GameContext* context)
     CMPUT350::Point2D to(location);
     // std::cout << to << std::endl;
     to.y -= length;
-    context->ScreenContext->DrawLine(location, to, width, CMPUT350::Colors::white); //move to render background so it looks like its coming out of ship
+    context->ScreenContext->DrawLine(location, to, width, CMPUT350::Colors::grey); //move to render background so it looks like its coming out of ship
 }
 
 void Bullet::RenderForeground(CMPUT350::GameContext* context) {

@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Bullet.h"
 
-Player::Player(CMPUT350::Point2D loc) : center(loc), bullets(2) {
+Player::Player(CMPUT350::Point2D loc) : center(loc), bullets(2), speed(5) {
     this->topLeft = CMPUT350::Point2D(loc.x - (width / 2), loc.y - (height/2));
 
 }
@@ -47,18 +47,18 @@ void Player::LateUpdate(CMPUT350::GameContext* context)
 
 bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) { 
     if (key == 'a') {
-        this->body.topLeft.x -= 1;
-        this->right_rect.topLeft.x -= 1;
-        this->left_rect.topLeft.x -= 1;
-        this->top_rect.topLeft.x -= 1;
-        this->center.x -= 1;
+        this->body.topLeft.x -= speed;
+        this->right_rect.topLeft.x -= speed;
+        this->left_rect.topLeft.x -= speed;
+        this->top_rect.topLeft.x -= speed;
+        this->center.x -= speed;
         return true;
     } else if (key == 'd') {
-        this->body.topLeft.x += 1;
-        this->right_rect.topLeft.x += 1;
-        this->left_rect.topLeft.x += 1;
-        this->top_rect.topLeft.x += 1;
-        this->center.x += 1;
+        this->body.topLeft.x += speed;
+        this->right_rect.topLeft.x += speed;
+        this->left_rect.topLeft.x += speed;
+        this->top_rect.topLeft.x += speed;
+        this->center.x += speed;
         return true;
     } else if (key == ' ') {
         if (tracking_bullet.size() < bullets) {
