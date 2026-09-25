@@ -30,14 +30,14 @@ void Bullet::LateUpdate(CMPUT350::GameContext* context)
 
 bool Bullet::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //bullet shouldn't need to respond to keyevent
 
-void Bullet::RenderBackground(CMPUT350::GameContext* context)
+void Bullet::RenderBackground(CMPUT350::GameContext* context) //move to render background so it looks like its coming out of ship
 {
-}
-
-void Bullet::RenderForeground(CMPUT350::GameContext* context) {
     CMPUT350::Point2D to(location);
     to.y -= length;
     context->ScreenContext->DrawLine(location, to, 3.0f, CMPUT350::Colors::white);
+}
+
+void Bullet::RenderForeground(CMPUT350::GameContext* context) {
 }
 
 void Bullet::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj)
