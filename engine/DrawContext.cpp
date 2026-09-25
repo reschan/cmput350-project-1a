@@ -5,6 +5,14 @@ namespace CMPUT350 {
 DrawContext::DrawContext(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<sf::Font> font)
     : mWindow(window), mFont(font) {}
 
+/**
+ * @brief Draws centered text.
+ *
+ * @param text: Text string to be printed.
+ * @param pixelSize: Font size to be printed as.
+ * @param p: Position to set the text.
+ * @param c: Color to set the text.
+ */
 void DrawContext::DrawCenteredText(const std::string &text, int pixelSize, Point2D p, RGBColor c) {
     // https://stackoverflow.com/questions/27806077/sfml-drawing-centered-text#comment44029433_27806198
     sf::Text textstring(*mFont);
@@ -15,6 +23,14 @@ void DrawContext::DrawCenteredText(const std::string &text, int pixelSize, Point
     mWindow->draw(textstring);
 }
 
+/**
+ * @brief Draws (non-centered) text.
+ *
+ * @param text: Text string to be printed.
+ * @param pixelSize: Font size to be printed as.
+ * @param p: Position to set the text.
+ * @param c: Color to set the text.
+ */
 void DrawContext::DrawText(const std::string &text, int pixelSize, Point2D p, RGBColor c) {
     sf::Text textstring(*mFont);
     textstring.setString(text);
@@ -24,6 +40,13 @@ void DrawContext::DrawText(const std::string &text, int pixelSize, Point2D p, RG
     mWindow->draw(textstring);
 }
 
+/**
+ * @brief Draws a circle.
+ *
+ * @param p: Center point of the circle.
+ * @param radius: Radius of the circle.
+ * @param c: Color of the circle to be drawn.
+ */
 void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
     sf::CircleShape circle(radius);
     circle.setFillColor(sf::Color(c.r, c.g, c.b));
@@ -32,6 +55,12 @@ void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
     mWindow->draw(circle);
 }
 
+/**
+ * @brief Draws a rectangle.
+ *
+ * @param r: Rectangle object to be drawn.
+ * @param c: Color of the rectangle to be drawn.
+ */
 void DrawContext::DrawRect(Rect r, RGBColor c) {
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setFillColor(sf::Color(c.r, c.g, c.b));
@@ -39,6 +68,13 @@ void DrawContext::DrawRect(Rect r, RGBColor c) {
     mWindow->draw(rectangle);
 }
 
+/**
+ * @brief Draws the outline of a rectangle.
+ *
+ * @param r: Rectangle object to be drawn.
+ * @param width: Width of the outline to be drawn.
+ * @param c: Color of the outline to be drawn.
+ */
 void DrawContext::FrameRect(Rect r, float width, RGBColor c) {
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setOutlineColor(sf::Color(c.r, c.g, c.b));
