@@ -38,6 +38,7 @@ private:
     int height = 40;
     std::weak_ptr<Bullet> tracking_bullet1;
     std::weak_ptr<Bullet> tracking_bullet2;
+    bool isAlive;
 };
 
 #endif

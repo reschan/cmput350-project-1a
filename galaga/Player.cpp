@@ -69,7 +69,7 @@ bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) {
 }
 
 void Player::RenderBackground(CMPUT350::GameContext* context) {
-    context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
+    //context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
     context->ScreenContext->DrawRect(this->body, CMPUT350::Colors::white);
 }
 
@@ -84,14 +84,11 @@ void Player::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& ob
 {
 }
 
-void Player::Kill()
-{
-}
+void Player::Kill() { this->isAlive = false; }
 
 bool Player::IsAlive() const
 {
-    // TODO: Update code
-    return true;
+    return isAlive;
 }
 
 const CMPUT350::Rect& Player::GetBounds()
