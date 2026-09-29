@@ -107,6 +107,13 @@ struct Point2D {
         }
     }
     /**
+     * @brief Check if another point is not equal to self
+     *
+     * @param other The other point
+     * @return True/false depending if other point is not equal to self
+     */
+    bool operator!=(const Point2D& other) const { return !(*this == other); }
+    /**
      * @brief Multiplies a scalar with self
      *
      * @param scalar Scalar to multiply with the point
