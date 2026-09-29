@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "Bullet.h"
 
-Player::Player(CMPUT350::Point2D loc) : center(loc), bullets(2), speed(5) {
+Player::Player(CMPUT350::Point2D loc) : isAlive(true), center(loc), bullets(2), speed(5) {
     this->topLeft = CMPUT350::Point2D(loc.x - (width / 2), loc.y - (height/2));
 
 }
