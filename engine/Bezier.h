@@ -1,5 +1,7 @@
 #ifndef BEZIER_H
 #define BEZIER_H
+#include "MathUtil.h"
+#include <vector>
 
 namespace CMPUT350 {
 
@@ -12,6 +14,9 @@ public:
 
     static Point2D GetPoint(const std::vector<Point2D>& pts, float t);
     static Point2D GetSlope(const std::vector<Point2D>& pts, float t);
+
+private:
+    const std::vector<Point2D>& pts;
 };
 
 }  // namespace CMPUT350
