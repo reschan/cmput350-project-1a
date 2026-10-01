@@ -205,14 +205,49 @@ struct Line {
         Point2D x = p1 + (temp*p1p_length);
         return x;
     }
+    /**
+     * @brief Determines whether self and other line crosses, and if so, finds crossing point.
+     *
+     * @param other Other line to determine crossing with
+     * @param crossingPoint Address to store crossing point in, if they are crossing
+     * @return Boolean of if they are crossing or not
+     */
     bool Crosses(Line other, Point2D &crossingPoint) const {
-        // TODO: write this code
-        return false;
+        // Q = self, P = other
+        float selfOtherCross = Point2D::Cross((p2 - p1), (other.p2 - other.p1));
+        float otherSelfCross = Point2D::Cross((other.p2 - other.p1), (p2 - p1));
+        if (selfOtherCross == 0 || otherSelfCross == 0) {
+            return false;
+        }
+        // Q = other, P = self
+        float selfScalar = (Point2D::Cross((other.p1 - p1), (other.p2 - other.p1))) / selfOtherCross;
+        float otherScalar = (Point2D::Cross((p1 - other.p1), (p2 - p1))) / otherSelfCross;
+        if (selfScalar < 0 || selfScalar > 1 || otherScalar < 0 || selfScalar > 1) {
+            return false;
+        }
+        crossingPoint = (selfScalar * (p2 - p1)) + p1;
+        return true;
     }
 };
 
+/**
+ * @brief Prints info about a line
+ *
+ * @param os Stream to print to
+ * @param l Line to print
+ * @return Reference to printing stream
+ */
 static std::ostream &operator<<(std::ostream &os, const Line &l) {
-    // TODO: write this code
+    os << "Line: Point 1 x: ";
+    os << l.p1.x;
+    os << " y: ";
+    os << l.p1.y;
+    os << "Point 2 x: ";
+    os << l.p2.x;
+    os << " y: ";
+    os << l.p2.y;
+    os << " Length: ";
+    os << l.Length();
     return os;
 }
 
@@ -224,6 +259,23 @@ struct Circle {
 
     Circle(float x, float y, float r) : center(x, y), radius(r) {}
 };
+
+/**
+ * @brief Prints info about a circle
+ *
+ * @param os Stream to print to
+ * @param c Circle to print
+ * @return Reference to printing stream
+ */
+static std::ostream& operator<<(std::ostream& os, const Circle& c) {
+    os << "Circle: Radius: ";
+    os << c.radius;
+    os << " Center x: ";
+    os << c.center.x;
+    os << " y: ";
+    os << c.center.y;
+    return os; 
+}
 
 struct Rect {
     Point2D topLeft;
