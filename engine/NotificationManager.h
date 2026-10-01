@@ -1,6 +1,11 @@
 #ifndef NOTIFICATION_MANAGER_H
 #define NOTIFICATION_MANAGER_H
 
+#include "GameObject.h"
+#include <memory>
+#include <unordered_map>
+#include <vector>
+
 namespace CMPUT350 {
 
 class NotificationManager {
