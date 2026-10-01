@@ -2,7 +2,7 @@
 #include "Enemy.h"
 #include <iostream>
 
-Bullet::Bullet(CMPUT350::Point2D location, CMPUT350::Point2D heading, bool player) : location(location), heading(heading), player(player), length(20.0f), velocity(25.0f), width(3.0f) {}
+Bullet::Bullet(CMPUT350::Point2D location, CMPUT350::Point2D heading, bool player) : isAlive(true), location(location), heading(heading), player(player), length(20.0f), velocity(25.0f), width(3.0f) {}
 
 bool Bullet::IsPlayerBullet()
 {
