@@ -60,6 +60,16 @@ void Enemy::ReceiveNotification(const std::string& key) {
     // TODO: write uwu
 }
 
+CMPUT350::Point2D Enemy::GetLocation() const {
+    // TODO: write uwu
+    return {0, 0};
+}
+
+float Enemy::GetRotation() const {
+    // TODO: write uwu
+    return 0;
+}
+
 const CMPUT350::Rect& Enemy::GetBounds()
 {
     // TODO: Update code

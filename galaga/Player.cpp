@@ -99,6 +99,16 @@ void Player::ReceiveNotification(const std::string& key) {
     // TODO: write uwu
 }
 
+CMPUT350::Point2D Player::GetLocation() const {
+    // TODO: write uwu
+    return {0, 0};
+}
+
+float Player::GetRotation() const {
+    // TODO: write uwu
+    return 0;
+}
+
 const CMPUT350::Rect& Player::GetBounds()
 {
     this->bounds = CMPUT350::Rect({0, 0}, 0, 0);

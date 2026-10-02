@@ -68,6 +68,16 @@ void Bullet::ReceiveNotification(const std::string& key) {
     // TODO: write uwu
 }
 
+CMPUT350::Point2D Bullet::GetLocation() const {
+    // TODO: write uwu
+    return {0, 0};
+}
+
+float Bullet::GetRotation() const {
+    // TODO: write uwu
+    return 0;
+}
+
 const CMPUT350::Rect& Bullet::GetBounds()
 {
     // TODO: Update code
