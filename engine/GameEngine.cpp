@@ -7,13 +7,7 @@
 namespace CMPUT350 {
 #include "FontData.h"
 
-GameEngine::GameEngine(unsigned int width, unsigned int height, const std::string& name) {
-    // Sample font loading code
-    //	if (!mFont->openFromMemory(&_font, _font_len))
-    //	{
-    //		fprintf(stderr, "WARNING: Font did not load.\n");
-    //	}
-    
+GameEngine::GameEngine(unsigned int width, unsigned int height, const std::string& name) {    
     // load window
     mWindow.reset(new sf::RenderWindow(sf::VideoMode({width, height}), name));
     mWindow->setFramerateLimit(30);
