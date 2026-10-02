@@ -27,23 +27,25 @@ public:
     // Collision Object Functions
     void CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj) override;
     const CMPUT350::Rect& GetBounds() override;
+    const std::vector<CMPUT350::Shape>& GetShapes() override;
 
 private:
     CMPUT350::Point2D center;
     CMPUT350::Point2D topLeft;
     CMPUT350::Rect body;
-    CMPUT350::Rect top_rect;
-    CMPUT350::Rect left_rect;
-    CMPUT350::Rect right_rect;
+    CMPUT350::Rect topRect;
+    CMPUT350::Rect leftRect;
+    CMPUT350::Rect rightRect;
     CMPUT350::Rect bounds;
     int width = 40;
     int height = 40;
     int speed;
 
-    std::vector<std::weak_ptr<Bullet>> tracking_bullet;
+    std::vector<std::weak_ptr<Bullet>> trackingBullet;
     int bullets;
 
     bool isAlive;
+    std::vector<CMPUT350::Shape> selfShapes;
 };
 
 #endif

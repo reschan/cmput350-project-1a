@@ -19,6 +19,7 @@ public:
         mLoc.y = yRand(gen);
         mSpeed.x = speed(gen); // Random speed between 1 and 5
         mSpeed.y = speed(gen); // Random speed between 1 and 5
+        selfShapes.push_back(CMPUT350::Circle(CMPUT350::Point2D(mLoc.x, mLoc.y), mRadius));
     }
 
     void Update(CMPUT350::GameContext* context) override
@@ -97,12 +98,24 @@ public:
         context->ScreenContext->DrawLine(mLoc, mLoc + mCollisionPoint, mRadius * 0.1f, CMPUT350::Colors::blue);
     }
 
+    std::vector<CMPUT350::Shape>& GetShapes() override { return selfShapes;
+    }
+
+    CMPUT350::Point2D GetLocation() const {
+        return mLoc;
+    }
+
+    float GetRotation() const {
+        return 0;
+    }
+
 private:
     static std::random_device rd;
     static std::mt19937 gen;
 
     int mRadius, mNumCollisions, mFrameCollisions;
     CMPUT350::Point2D mLoc, mSpeed, mSpeedNext, mCollisionPoint;
+    std::vector<CMPUT350::Shape> selfShapes;
 };
 
 // Shared randoms across all balls

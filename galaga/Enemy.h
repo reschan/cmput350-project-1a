@@ -27,6 +27,7 @@ public:
     // Collision Object Functions
     void CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj) override;
     const CMPUT350::Rect& GetBounds() override;
+    const std::vector<CMPUT350::Shape>& GetShapes() override;
 
 private: 
     CMPUT350::Point2D center;
@@ -36,6 +37,7 @@ private:
     int height;
     bool isAlive;
     CMPUT350::Rect body;
+    std::vector<CMPUT350::Shape> selfShapes;
 };
 
 

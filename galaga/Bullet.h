@@ -28,6 +28,7 @@ public:
     // Collision Object Functions
     void CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj) override;
     const CMPUT350::Rect& GetBounds() override;
+    const std::vector<CMPUT350::Shape>& GetShapes() override;
 
 private:
     bool player;
@@ -38,5 +39,6 @@ private:
     bool isAlive;
     float width;
     CMPUT350::Rect bounds;
+    std::vector<CMPUT350::Shape> selfShapes;
 };
 #endif // BULLET_H

@@ -26,17 +26,21 @@ void Player::Initialize(CMPUT350::GameContext* context) {
     float top_rect_y_offset = 1.5*((body_width / 2) + (body_height * 0.005)) - (top_rect_height/4);
     float body_x_offset = body_width / 2;
 
-    this->body = CMPUT350::Rect({this->topLeft.x + body_x_offset, this->topLeft.y}, body_width, body_height);
-    this->top_rect = CMPUT350::Rect({this->topLeft.x + top_rect_x_offset, this->topLeft.y - top_rect_y_offset}, top_rect_width, top_rect_height);
-    this->left_rect = CMPUT350::Rect({this->topLeft.x - side_rect_x_offset + tl_center_adjustment, this->topLeft.y + side_rect_y_offset}, side_rect_width, side_rect_height);
-    this->right_rect = CMPUT350::Rect({this->topLeft.x + side_rect_x_offset + tl_center_adjustment, this->topLeft.y + side_rect_y_offset}, side_rect_width, side_rect_height);
+    body = CMPUT350::Rect({this->topLeft.x + body_x_offset, this->topLeft.y}, body_width, body_height);
+    selfShapes.push_back(body);
+    topRect = CMPUT350::Rect({this->topLeft.x + top_rect_x_offset, this->topLeft.y - top_rect_y_offset}, top_rect_width, top_rect_height);
+    selfShapes.push_back(body);
+    leftRect = CMPUT350::Rect({this->topLeft.x - side_rect_x_offset + tl_center_adjustment, this->topLeft.y + side_rect_y_offset}, side_rect_width, side_rect_height);
+    selfShapes.push_back(leftRect);
+    rightRect = CMPUT350::Rect({this->topLeft.x + side_rect_x_offset + tl_center_adjustment, this->topLeft.y + side_rect_y_offset}, side_rect_width, side_rect_height);
+    selfShapes.push_back(rightRect);
 }
 
 void Player::Update(CMPUT350::GameContext* context) { 
     GetBounds();
-    for (int i = 0; i < tracking_bullet.size(); i++) {
-        if (tracking_bullet[i].expired()) {
-            tracking_bullet.erase(tracking_bullet.begin() + i);
+    for (int i = 0; i < trackingBullet.size(); i++) {
+        if (trackingBullet[i].expired()) {
+            trackingBullet.erase(trackingBullet.begin() + i);
         }
     }
 }
@@ -48,24 +52,24 @@ void Player::LateUpdate(CMPUT350::GameContext* context)
 bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) { // nuke later
     if (key == 'a') {
         this->body.topLeft.x -= speed;
-        this->right_rect.topLeft.x -= speed;
-        this->left_rect.topLeft.x -= speed;
-        this->top_rect.topLeft.x -= speed;
+        this->rightRect.topLeft.x -= speed;
+        this->leftRect.topLeft.x -= speed;
+        this->topRect.topLeft.x -= speed;
         this->center.x -= speed;
         return true;
     } else if (key == 'd') {
         this->body.topLeft.x += speed;
-        this->right_rect.topLeft.x += speed;
-        this->left_rect.topLeft.x += speed;
-        this->top_rect.topLeft.x += speed;
+        this->rightRect.topLeft.x += speed;
+        this->leftRect.topLeft.x += speed;
+        this->topRect.topLeft.x += speed;
         this->center.x += speed;
         return true;
     } else if (key == ' ') {
-        if (tracking_bullet.size() < bullets) {
+        if (trackingBullet.size() < bullets) {
             auto bullet = std::make_shared<Bullet>(center, center, true);
             context->mEngineView->AddGameObject(bullet);
             std::weak_ptr<Bullet> t_bullet = bullet;
-            tracking_bullet.push_back(bullet);
+            trackingBullet.push_back(bullet);
             return true;
         }
     }
@@ -79,9 +83,9 @@ void Player::RenderBackground(CMPUT350::GameContext* context) {
 
 void Player::RenderForeground(CMPUT350::GameContext* context)
 {
-    context->ScreenContext->DrawRect(this->top_rect, CMPUT350::Colors::red);
-    context->ScreenContext->DrawRect(this->left_rect, CMPUT350::Colors::red);
-    context->ScreenContext->DrawRect(this->right_rect, CMPUT350::Colors::red);
+    context->ScreenContext->DrawRect(this->topRect, CMPUT350::Colors::red);
+    context->ScreenContext->DrawRect(this->leftRect, CMPUT350::Colors::red);
+    context->ScreenContext->DrawRect(this->rightRect, CMPUT350::Colors::red);
 }
 
 void Player::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj)
@@ -113,9 +117,11 @@ const CMPUT350::Rect& Player::GetBounds()
 {
     this->bounds = CMPUT350::Rect({0, 0}, 0, 0);
     this->bounds |= this->body;
-    this->bounds |= this->top_rect;
-    this->bounds |= this->left_rect;
-    this->bounds |= this->right_rect;
+    this->bounds |= this->topRect;
+    this->bounds |= this->leftRect;
+    this->bounds |= this->rightRect;
     // std::cout << this->bounds << std::endl;
     return this->bounds; // saving in class in case needed for drawing 
 }
+
+const std::vector<CMPUT350::Shape>& Player::GetShapes() { return selfShapes; }

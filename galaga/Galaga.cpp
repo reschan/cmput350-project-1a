@@ -36,10 +36,6 @@ void Galaga::RenderForeground(CMPUT350::GameContext* context) {
 
 }
 
-CMPUT350::Point2D Galaga::GetLocation() const {
+CMPUT350::Point2D Galaga::GetLocation() const { return {0, 0}; }
 
-}
-
-float Galaga::GetRotation() const {
-
-}
+float Galaga::GetRotation() const { return 0; }

@@ -11,6 +11,7 @@ void Enemy::Initialize(CMPUT350::GameContext* context) {
     this->topLeft = CMPUT350::Point2D(this->center.x - (width / 2), this->center.y - (height / 2));
     this->isAlive = true;
     this->body = CMPUT350::Rect(this->topLeft, this->width, this->height);
+    selfShapes.push_back(body);
 }
 
 void Enemy::Update(CMPUT350::GameContext* context)
@@ -77,3 +78,5 @@ const CMPUT350::Rect& Enemy::GetBounds()
     this->bounds |= this->body;
     return this->bounds;
 }
+
+const std::vector<CMPUT350::Shape>& Enemy::GetShapes() { return selfShapes; }

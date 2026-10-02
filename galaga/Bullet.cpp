@@ -39,6 +39,7 @@ void Bullet::RenderBackground(CMPUT350::GameContext* context)
     // std::cout << to << std::endl;
     to.y -= length;
     context->ScreenContext->DrawLine(location, to, width, CMPUT350::Colors::grey); //move to render background so it looks like its coming out of ship
+    selfShapes.push_back(CMPUT350::Line(location, heading));
 }
 
 void Bullet::RenderForeground(CMPUT350::GameContext* context) {
@@ -89,3 +90,5 @@ const CMPUT350::Rect& Bullet::GetBounds()
     // std::cout << this->bounds << std::endl;
     return this->bounds;
 }
+
+const std::vector<CMPUT350::Shape>& Bullet::GetShapes() { return selfShapes; }
