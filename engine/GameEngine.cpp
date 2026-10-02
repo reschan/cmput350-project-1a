@@ -15,6 +15,8 @@ GameEngine::GameEngine(unsigned int width, unsigned int height, const std::strin
     // initialize object vectors
     mObjectPending.reset(new std::vector<std::shared_ptr<GameObject>>);
     mObjects.reset(new std::vector<std::shared_ptr<GameObject>>);
+    mKeydown.reset(new std::unordered_map<int, std::string>);
+    mKeyup.reset(new std::unordered_map<int, std::string>);
 
     // TODO: load resources
     mFont.reset(new sf::Font);
@@ -27,6 +29,8 @@ GameEngine::GameEngine(unsigned int width, unsigned int height, const std::strin
     context.reset(new GameContext());
     context->mEngineView = this;
     context->ScreenContext = new DrawContext(mWindow, mFont);
+    context->GUIContext = new DrawContext(mWindow, mFont);
+    context->mNotificationManager = new NotificationManager();
 }
 
 GameEngine::~GameEngine() {
@@ -47,6 +51,22 @@ GameEngine::~GameEngine() {
 void GameEngine::AddGameObject(std::shared_ptr<GameObject> gameObject) {
     mObjectPending->push_back(gameObject); // add to pending array to be initialized next frame
 }
+
+void GameEngine::InstallKeyDownNotification(int key, const std::string& notification) {
+    mKeydown->insert(std::pair<int, std::string>(key, notification));
+}
+
+void GameEngine::InstallKeyUpNotification(int key, const std::string& notification) {
+    mKeyup->insert(std::pair<int, std::string>(key, notification));
+}
+
+GameEngine::const_iterator GameEngine::cbegin() const { return mObjects->cbegin(); }
+
+GameEngine::const_iterator GameEngine::cend() const { return mObjects->cend(); }
+
+GameEngine::const_iterator GameEngine::begin() const { return mObjects->begin(); }
+
+GameEngine::const_iterator GameEngine::end() const { return mObjects->end(); }
 
 /**
  * @method Run
@@ -72,13 +92,22 @@ void GameEngine::Run() {
 
         // 2. Process events
         while (const std::optional event = mWindow->pollEvent()) {
-            if (const auto* keyPressed = event->getIf<sf::Event::TextEntered>()) {
-                if (keyPressed->unicode < 128) {
-                    for (const std::shared_ptr<GameObject>& i : *mObjects) {
-                        i->HandleKeyEvent(context.get(), static_cast<char>(keyPressed->unicode));  // invoke event update every objects
-                    }
+            // (1b) Send keys to notification manager
+            // keydown
+            if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+                if (mKeydown->contains((int)keyPressed->code)) {
+                    context->mNotificationManager->Notify(mKeyup->at((int)keyPressed->code));
                 }
             }
+
+            // keyup
+            if (const auto* keyReleased = event->getIf<sf::Event::KeyReleased>()) {
+                if (mKeyup->contains((int) keyReleased->code)) {
+                    context->mNotificationManager->Notify(mKeyup->at((int)keyReleased->code));
+                }
+            }
+
+            // window closing behavior
             if (event->is<sf::Event::Closed>()) mWindow->close();
         }
 
@@ -88,6 +117,7 @@ void GameEngine::Run() {
         }
 
         // 4. Process collision events
+        // (1b) Compute collisions?
         for (const std::shared_ptr<GameObject>& i : *mObjects) {
             std::shared_ptr<CollisionObject> obj1 = std::dynamic_pointer_cast<CollisionObject>(i);
             if (obj1 == nullptr) { continue; }
@@ -108,26 +138,33 @@ void GameEngine::Run() {
         // Clear window
         mWindow->clear(sf::Color::Black);
 
+        // (1b) Get offsets and rotations from objects and pass them to DrawContext
+
         // 6. Render background
         for (const std::shared_ptr<GameObject>& i : *mObjects) {
             std::shared_ptr<GraphicsObject> obj = std::dynamic_pointer_cast<GraphicsObject>(i);
             if (obj == nullptr) { continue; }
 
+            context->ScreenContext->SetContextRotation(obj->GetRotation());
+            context->ScreenContext->SetContextOffset(obj->GetLocation());
             obj->RenderBackground(context.get());
         }
 
         // 7. Render foreground
         for (const std::shared_ptr<GameObject>& i : *mObjects) {
             std::shared_ptr<GraphicsObject> obj = std::dynamic_pointer_cast<GraphicsObject>(i);
-            if (obj == nullptr) {
-                continue;
-            }
+            if (obj == nullptr) { continue; }
             //printf("drawing foreground\n");
+
+            context->ScreenContext->SetContextRotation(obj->GetRotation());
+            context->ScreenContext->SetContextOffset(obj->GetLocation());
             obj->RenderForeground(context.get());
         }
 
         // Actually render to window
         mWindow->display();
+
+        context->currentFrame += 1;
         //std::cout << mObjects->size() << std::endl;
     }
 }

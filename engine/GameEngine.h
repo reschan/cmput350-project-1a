@@ -16,6 +16,7 @@ namespace CMPUT350 {
 class DrawContext;
 
 class GameEngine : public EngineView {
+    using const_iterator = tGameObject::const_iterator;
 public:
     GameEngine(unsigned int width, unsigned int height, const std::string& name);
     ~GameEngine();
@@ -26,6 +27,12 @@ public:
     GameEngine& operator=(GameEngine&&) = delete;       // Prevent move-assignment
 
     void AddGameObject(std::shared_ptr<GameObject> gameObject) override;
+    void InstallKeyDownNotification(int, const std::string& notification) override;
+    void InstallKeyUpNotification(int, const std::string& notification) override;
+    const_iterator cbegin() const override;
+    const_iterator cend() const override;
+    const_iterator begin() const override;
+    const_iterator end() const override;
 
     void Run();
 
@@ -38,6 +45,10 @@ private:
     std::unique_ptr<std::vector<std::shared_ptr<GameObject>>> mObjects;  // pointer to game objects
 
     std::unique_ptr<GameContext> context; // keeps track of game contexts
+
+    // key mapping
+    std::unique_ptr<std::unordered_map<int, std::string>> mKeydown;
+    std::unique_ptr<std::unordered_map<int, std::string>> mKeyup;
 };
 
 }  // namespace CMPUT350
