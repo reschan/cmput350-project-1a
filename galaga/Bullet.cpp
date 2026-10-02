@@ -30,7 +30,7 @@ void Bullet::LateUpdate(CMPUT350::GameContext* context)
 {
 }
 
-bool Bullet::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //bullet shouldn't need to respond to keyevent
+// bool Bullet::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //bullet shouldn't need to respond to keyevent
 
 void Bullet::RenderBackground(CMPUT350::GameContext* context) 
 {
@@ -62,6 +62,10 @@ bool Bullet::IsAlive() const
 {
     // TODO: Update code
     return isAlive;
+}
+
+void Bullet::ReceiveNotification(const std::string& key) {
+    // TODO: write uwu
 }
 
 const CMPUT350::Rect& Bullet::GetBounds()

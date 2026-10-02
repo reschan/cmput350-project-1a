@@ -20,7 +20,7 @@ void Enemy::LateUpdate(CMPUT350::GameContext* context)
 {
 }
 
-bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //enemy shouldn't need to respond to keyevent
+// bool Enemy::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //enemy shouldn't need to respond to keyevent
 
 void Enemy::RenderBackground(CMPUT350::GameContext* context) {
     //context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
@@ -54,6 +54,10 @@ bool Enemy::IsAlive() const
 {
     // TODO: Update code
     return isAlive;
+}
+
+void Enemy::ReceiveNotification(const std::string& key) {
+    // TODO: write uwu
 }
 
 const CMPUT350::Rect& Enemy::GetBounds()

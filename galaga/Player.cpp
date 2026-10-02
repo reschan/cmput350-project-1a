@@ -45,7 +45,7 @@ void Player::LateUpdate(CMPUT350::GameContext* context)
 {
 }
 
-bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) { 
+bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) { // nuke later
     if (key == 'a') {
         this->body.topLeft.x -= speed;
         this->right_rect.topLeft.x -= speed;
@@ -93,6 +93,10 @@ void Player::Kill() { this->isAlive = false; }
 bool Player::IsAlive() const
 {
     return isAlive;
+}
+
+void Player::ReceiveNotification(const std::string& key) {
+    // TODO: write uwu
 }
 
 const CMPUT350::Rect& Player::GetBounds()
