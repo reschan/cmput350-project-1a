@@ -120,4 +120,82 @@ int DrawContext::GetWindowWidth() { return mWindow->getSize().x; }
 
 int DrawContext::GetWindowHeight() { return mWindow->getSize().y; }
 
+/**
+ * @brief Sets all drawing offset.
+ *
+ * @param p Point2D containing x and y of offset.
+ *
+ * Sets offset for all drawing commands. 
+ */
+void DrawContext::SetContextOffset(Point2D p) { contextOffset = p; }
+
+/**
+ * @brief Sets all rotation.
+ *
+ * @param rotation Amount of rotation.
+ *
+ * Sets rotation for all drawing commands.
+ */
+void DrawContext::SetContextRotation(float rotation) { contextRotation = rotation; }
+
+/**
+ * @brief Transforms a point from object space to screen space. 
+ *
+ * @param p Point2D to transform from its local object space back to screen space.
+ *
+ * @return Point2D of point in screen space
+ */
+Point2D DrawContext::Transform(Point2D p) const { return p + contextOffset; }
+
+/**
+ * @brief Transforms a point from screen space to object space.
+ *
+ * @param p Point2D to transform from its screen space back into local object space.
+ *
+ * @return Point2D of point in local object space
+ */
+Point2D DrawContext::ReverseTransform(Point2D p) const { return p - contextOffset; } //"multiplying by the inverted transform matrix"??
+
+/**
+ * @brief Rotates rectangle (changes topLeft) and computes new bounding box after rotation
+ *
+ * @param r Rectangle to rotate.
+ *
+ * @return Rectangle of bounding box after rotation.
+ */
+Rect DrawContext::Transform(Rect r) const {
+    float point1Radius = r.topLeft.Distance({0, 0});
+    Point2D newTopLeft = 
+        {std::cos((std::acos(r.topLeft.x / point1Radius)) + contextRotation) * point1Radius,
+        std::sin((std::asin(r.topLeft.y / point1Radius)) + contextRotation) * point1Radius};
+    r.topLeft = newTopLeft;
+    float point2Radius = (r.topLeft + r.width).Distance({0, 0});
+    Point2D newSecondPt = {
+        std::cos((std::acos((r.topLeft + r.width).x / point2Radius)) + contextRotation) *
+            point2Radius,
+        std::sin((std::asin((r.topLeft + r.width).y / point2Radius)) + contextRotation) *
+            point2Radius};
+    float point3Radius = (r.topLeft + r.height).Distance({0, 0});
+    Point2D newThirdPt = {
+        std::cos((std::acos((r.topLeft + r.height).x / point3Radius)) + contextRotation) *
+            point3Radius,
+        std::sin((std::asin((r.topLeft + r.height).y / point3Radius)) + contextRotation) *
+            point3Radius};
+    float point4Radius = (r.topLeft + r.width + r.height).Distance({0, 0});
+    Point2D newFourthPt = {
+        std::cos((std::acos((r.topLeft + r.width + r.height).x / point4Radius)) + contextRotation) *
+            point4Radius,
+        std::sin((std::asin((r.topLeft + r.width + r.height).y / point4Radius)) + contextRotation) *
+            point4Radius};
+
+    Rect boundingBox;
+    boundingBox.topLeft.x = std::min({r.topLeft.x, newSecondPt.x, newThirdPt.x, newFourthPt.x});
+    boundingBox.topLeft.y = std::min({r.topLeft.y, newSecondPt.y, newThirdPt.y, newFourthPt.y});
+    boundingBox.width =
+        std::max({r.topLeft.x, newSecondPt.x, newThirdPt.x, newFourthPt.x}) - boundingBox.topLeft.x;
+    boundingBox.height =
+        std::max({r.topLeft.y, newSecondPt.y, newThirdPt.y, newFourthPt.y}) - boundingBox.topLeft.y;
+    return boundingBox;
+}
+
 }  // namespace CMPUT350

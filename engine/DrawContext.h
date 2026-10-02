@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "MathUtil.h"
+#include "GameEngine.h"
 #include <SFML/Graphics.hpp>
 
 namespace CMPUT350 {
@@ -43,6 +44,14 @@ public:
 private:
     std::shared_ptr<sf::RenderWindow> mWindow;
     std::shared_ptr<sf::Font> mFont;
+    friend class GameEngine;
+    Point2D contextOffset;
+    float contextRotation;
+    void SetContextOffset(Point2D p);
+    void SetContextRotation(float rotation);
+    Point2D Transform(Point2D p) const;
+    Point2D ReverseTransform(Point2D p) const;
+    Rect Transform(Rect r) const;  // Rotates rectangle and computes new bounding box after rotation
 };
 
 }  // namespace CMPUT350
