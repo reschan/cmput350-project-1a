@@ -38,8 +38,6 @@ public:
     // lines, points/circles, or axis-aligned rectangles
     virtual const std::vector<Shape>& GetShapes() = 0;
 
-    Point2D GetLocation() const override;
-    float GetRotation() const override;
 };
 
 }  // namespace CMPUT350
