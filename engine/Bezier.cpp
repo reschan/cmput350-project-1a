@@ -51,7 +51,7 @@ Point2D Bezier::GetSlope(const std::vector<Point2D>& pts, float t) {
         throw std::out_of_range("t out of range.");
     }
     if (pts.size() % 3 != 1) {
-        throw std::exception("invalid number of point.");
+        throw std::runtime_error("invalid number of point.");
     }
 
     std::span spanPts = std::span<const Point2D>(pts);
