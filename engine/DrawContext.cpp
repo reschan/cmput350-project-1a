@@ -65,7 +65,7 @@ void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
  * @param c: Color of the rectangle to be drawn.
  */
 void DrawContext::DrawRect(Rect r, RGBColor c) {
-    r = Transform(r);
+    Transform(r);
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setFillColor(sf::Color(c.r, c.g, c.b));
     rectangle.setPosition({r.topLeft.x, r.topLeft.y});
