@@ -85,6 +85,7 @@ void GameEngine::Run() {
 
         // 1. Activate and initialize any objects added during the last frame
         for (int i = 0; i < mObjectPending->size(); i++) {
+            context->CurrObject = mObjectPending->at(i);
             mObjectPending->at(i)->Initialize(context.get()); // calls initialize
             mObjects->push_back(mObjectPending->at(i)); // add to live objects
             mObjectPending->erase(mObjectPending->begin() + i); // remove from pending

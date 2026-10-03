@@ -4,8 +4,7 @@
 #include "CollisionObject.h"
 #include "Bullet.h"
 
-class Player : public CMPUT350::CollisionObject
-{
+class Player : public CMPUT350::CollisionObject, std::enable_shared_from_this<Player> {
 public:
     Player(CMPUT350::Point2D loc);
 
@@ -43,6 +42,7 @@ private:
 
     std::vector<std::weak_ptr<Bullet>> trackingBullet;
     int bullets;
+    bool flag_shoot = false;
 
     bool isAlive;
     std::vector<CMPUT350::Shape> selfShapes;

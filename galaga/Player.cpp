@@ -9,6 +9,10 @@ Player::Player(CMPUT350::Point2D loc) : isAlive(true), center(loc), bullets(2), 
 }
 
 void Player::Initialize(CMPUT350::GameContext* context) {    
+    context->mNotificationManager->Register(context->CurrObject, "MoveLeft");
+    context->mNotificationManager->Register(context->CurrObject, "MoveRight");
+    context->mNotificationManager->Register(context->CurrObject, "Shoot");
+
     int side_rect_width = width / 4;
     int side_rect_height = height / 5;
     int top_rect_width = width / 5;
@@ -38,15 +42,21 @@ void Player::Initialize(CMPUT350::GameContext* context) {
 
 void Player::Update(CMPUT350::GameContext* context) { 
     GetBounds();
+    if (flag_shoot && trackingBullet.size() < bullets) {
+        auto bullet = std::make_shared<Bullet>(center, center, true);
+        context->mEngineView->AddGameObject(bullet);
+        std::weak_ptr<Bullet> t_bullet = bullet;
+        trackingBullet.push_back(bullet);
+    }
+    flag_shoot = false;
+}
+
+void Player::LateUpdate(CMPUT350::GameContext* context) {
     for (int i = 0; i < trackingBullet.size(); i++) {
         if (trackingBullet[i].expired()) {
             trackingBullet.erase(trackingBullet.begin() + i);
         }
     }
-}
-
-void Player::LateUpdate(CMPUT350::GameContext* context)
-{
 }
 
 bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) { // nuke later
@@ -104,27 +114,13 @@ void Player::ReceiveNotification(const std::string& key) {
     std::cout << "Player: notification received: " << key;
     if (key == "MoveLeft") {
         std::cout << "Player: MoveLeft\n";
-        this->body.topLeft.x -= speed;
-        this->rightRect.topLeft.x -= speed;
-        this->leftRect.topLeft.x -= speed;
-        this->topRect.topLeft.x -= speed;
         this->center.x -= speed;
     } else if (key == "MoveRight") {
         std::cout << "Player: MoveRight\n";
-        this->body.topLeft.x += speed;
-        this->rightRect.topLeft.x += speed;
-        this->leftRect.topLeft.x += speed;
-        this->topRect.topLeft.x += speed;
         this->center.x += speed;
-    }// else if (key == "Shoot") {
-     //   if (trackingBullet.size() < bullets) {
-     //       auto bullet = std::make_shared<Bullet>(center, center, true);
-     //       context->mEngineView->AddGameObject(bullet);
-     //       std::weak_ptr<Bullet> t_bullet = bullet;
-     //       trackingBullet.push_back(bullet);
-     //       return true;
-     //   }
-    //}
+    } else if (key == "Shoot") {
+        flag_shoot = true;
+    }
 }
 
 CMPUT350::Point2D Player::GetLocation() const { return center; }
