@@ -4,8 +4,8 @@
 #include "Bullet.h"
 
 Player::Player(CMPUT350::Point2D loc) : isAlive(true), center(loc), bullets(2), speed(5) {
-    this->topLeft = CMPUT350::Point2D(loc.x - (width / 2), loc.y - (height/2));
-
+    //topLeft = CMPUT350::Point2D(loc.x - (width / 2), loc.y - (height/2));
+    topLeft = CMPUT350::Point2D(0 - (width/2), 0 - (height/2));
 }
 
 void Player::Initialize(CMPUT350::GameContext* context) {    
@@ -127,7 +127,7 @@ void Player::ReceiveNotification(const std::string& key) {
     //}
 }
 
-CMPUT350::Point2D Player::GetLocation() const { return {0, 0}; }
+CMPUT350::Point2D Player::GetLocation() const { return center; }
 
 float Player::GetRotation() const {
     return rotation;

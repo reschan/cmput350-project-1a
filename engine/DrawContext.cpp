@@ -65,7 +65,9 @@ void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
  * @param c: Color of the rectangle to be drawn.
  */
 void DrawContext::DrawRect(Rect r, RGBColor c) {
+    //std::cout << r.topLeft << std::endl;
     r.topLeft = Transform(r.topLeft);
+    //std::cout << r.topLeft << std::endl;
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setFillColor(sf::Color(c.r, c.g, c.b));
     rectangle.setRotation(sf::radians(contextRotation));
