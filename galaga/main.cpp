@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Stars.h"
+#include "Galaga.h"
 
 class Ball : public CMPUT350::CollisionObject
 {
@@ -135,15 +136,9 @@ int main()
         engine.Run();
     } else {
         CMPUT350::GameEngine engine(768, 1024, "Galaga");
-        auto player = std::make_shared<Player>(CMPUT350::Point2D(768 / 2, 900));
-        engine.AddGameObject(player);
-        engine.AddGameObject(std::make_shared<Stars>(250, CMPUT350::Rect(0, 0, 768, 1024)));
-        for (int y = 0; y < 10; y++) {
-            for (int x = 0; x < 4; x++) {
-                auto enemy = std::make_shared<Enemy>(CMPUT350::Point2D(100 + x * 200, 100 + 50 * y));
-                engine.AddGameObject(enemy);
-            }
-        }
+        auto galaga = std::make_shared<Galaga>();
+        engine.AddGameObject(galaga);
+        
         engine.Run();
     }
     return 0;
