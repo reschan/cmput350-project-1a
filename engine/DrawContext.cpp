@@ -3,7 +3,7 @@
 namespace CMPUT350 {
 
 DrawContext::DrawContext(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<sf::Font> font)
-    : mWindow(window), mFont(font) {}
+    : mWindow(window), mFont(font), contextOffset(Point2D(0, 0)), contextRotation(0) {}
 
 /**
  * @brief Draws centered text.
@@ -15,6 +15,7 @@ DrawContext::DrawContext(std::shared_ptr<sf::RenderWindow> window, std::shared_p
  */
 void DrawContext::DrawCenteredText(const std::string &text, int pixelSize, Point2D p, RGBColor c) {
     // https://stackoverflow.com/questions/27806077/sfml-drawing-centered-text#comment44029433_27806198
+    //p = Transform(p);
     sf::Text textstring(*mFont);
     textstring.setString(text);
     textstring.setCharacterSize(pixelSize);
@@ -32,6 +33,7 @@ void DrawContext::DrawCenteredText(const std::string &text, int pixelSize, Point
  * @param c: Color to set the text.
  */
 void DrawContext::DrawText(const std::string &text, int pixelSize, Point2D p, RGBColor c) {
+    //p = Transform(p);
     sf::Text textstring(*mFont);
     textstring.setString(text);
     textstring.setCharacterSize(pixelSize);
@@ -48,6 +50,7 @@ void DrawContext::DrawText(const std::string &text, int pixelSize, Point2D p, RG
  * @param c: Color of the circle to be drawn.
  */
 void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
+    //p = Transform(p);
     sf::CircleShape circle(radius);
     circle.setFillColor(sf::Color(c.r, c.g, c.b));
     circle.setOrigin({radius, radius});
@@ -62,6 +65,7 @@ void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
  * @param c: Color of the rectangle to be drawn.
  */
 void DrawContext::DrawRect(Rect r, RGBColor c) {
+    //r = Transform(r);
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setFillColor(sf::Color(c.r, c.g, c.b));
     rectangle.setPosition({r.topLeft.x, r.topLeft.y});
@@ -76,6 +80,7 @@ void DrawContext::DrawRect(Rect r, RGBColor c) {
  * @param c: Color of the outline to be drawn.
  */
 void DrawContext::FrameRect(Rect r, float width, RGBColor c) {
+    //r = Transform(r);
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setOutlineColor(sf::Color(c.r, c.g, c.b));
     rectangle.setFillColor(sf::Color::Transparent);
@@ -97,6 +102,8 @@ void DrawContext::FrameRect(Rect r, float width, RGBColor c) {
  * relative to the world offset and rendered onto the associated window.
  */
 void DrawContext::DrawLine(Point2D from, Point2D to, float width, RGBColor c) {
+    //from = Transform(from);
+    //to = Transform(to);
     float length = Line(from, to).Length();
     float fromx_1 = from.x - (width / 2) * ((to.y - from.y) / length);
     float fromy_1 = from.y + (width / 2) * ((to.x - from.x) / length);
@@ -132,11 +139,11 @@ void DrawContext::SetContextOffset(Point2D p) { contextOffset = p; }
 /**
  * @brief Sets all rotation.
  *
- * @param rotation Amount of rotation.
+ * @param rotation Amount of rotation in radians.
  *
  * Sets rotation for all drawing commands.
  */
-void DrawContext::SetContextRotation(float rotation) { contextRotation = rotation; }
+void DrawContext::SetContextRotation(float rotation) { contextRotation = rotation; } 
 
 /**
  * @brief Transforms a point from object space to screen space. 
@@ -158,8 +165,8 @@ Point2D DrawContext::Transform(Point2D p) const {
  * @return Point2D of point in local object space
  */
 Point2D DrawContext::ReverseTransform(Point2D p) const { 
-    return Point2D(((p.x - contextOffset.x) * (cos(contextRotation)) + ((p.y - contextOffset.y) * sin(contextRotation))),
-                   ((p.x - contextOffset.x) * (cos(contextRotation)) - ((p.y - contextOffset.y) * sin(contextRotation))));
+    return Point2D(((p.x - contextOffset.x) * cos(contextRotation) + ((p.y - contextOffset.y) * sin(contextRotation))),
+                   ((p.x - contextOffset.x) * sin(contextRotation) - ((p.y - contextOffset.y) * cos(contextRotation))));
 } 
 
 /**
