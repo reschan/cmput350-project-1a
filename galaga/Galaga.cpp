@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Stars.h"
+#include "Keyboard.h"
 
 Galaga::Galaga() : isAlive(true) {
 
@@ -18,10 +19,9 @@ void Galaga::Initialize(CMPUT350::GameContext* context) {
             context->mEngineView->AddGameObject(enemy);
         }
     }
-    context->mEngineView->InstallKeyDownNotification((int)sf::Keyboard::Key::A, "MoveLeft");
-    context->mEngineView->InstallKeyDownNotification((int)sf::Keyboard::Key::D, "MoveRight");
-    context->mNotificationManager->Register(player, "MoveLeft");
-    context->mNotificationManager->Register(player, "MoveRight");
+    context->mEngineView->InstallKeyDownNotification((int) sf::Keyboard::Key::A, "MoveLeft");
+    context->mEngineView->InstallKeyDownNotification((int) sf::Keyboard::Key::D, "MoveRight");
+    context->mEngineView->InstallKeyDownNotification((int) sf::Keyboard::Key::Space, "Shoot");
 }
 
 void Galaga::Update(CMPUT350::GameContext* context) {
