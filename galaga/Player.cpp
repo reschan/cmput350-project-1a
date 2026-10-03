@@ -8,7 +8,7 @@ Player::Player(CMPUT350::Point2D loc) : isAlive(true), center(loc), bullets(2), 
 
 }
 
-void Player::Initialize(CMPUT350::GameContext* context) {
+void Player::Initialize(CMPUT350::GameContext* context) {    
     int side_rect_width = width / 4;
     int side_rect_height = height / 5;
     int top_rect_width = width / 5;
@@ -101,6 +101,30 @@ bool Player::IsAlive() const
 
 void Player::ReceiveNotification(const std::string& key) {
     // TODO: write uwu
+    std::cout << "Player: notification received: " << key;
+    if (key == "MoveLeft") {
+        std::cout << "Player: MoveLeft\n";
+        this->body.topLeft.x -= speed;
+        this->rightRect.topLeft.x -= speed;
+        this->leftRect.topLeft.x -= speed;
+        this->topRect.topLeft.x -= speed;
+        this->center.x -= speed;
+    } else if (key == "MoveRight") {
+        std::cout << "Player: MoveRight\n";
+        this->body.topLeft.x += speed;
+        this->rightRect.topLeft.x += speed;
+        this->leftRect.topLeft.x += speed;
+        this->topRect.topLeft.x += speed;
+        this->center.x += speed;
+    }// else if (key == "Shoot") {
+     //   if (trackingBullet.size() < bullets) {
+     //       auto bullet = std::make_shared<Bullet>(center, center, true);
+     //       context->mEngineView->AddGameObject(bullet);
+     //       std::weak_ptr<Bullet> t_bullet = bullet;
+     //       trackingBullet.push_back(bullet);
+     //       return true;
+     //   }
+    //}
 }
 
 CMPUT350::Point2D Player::GetLocation() const {
