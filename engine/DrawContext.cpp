@@ -65,9 +65,10 @@ void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
  * @param c: Color of the rectangle to be drawn.
  */
 void DrawContext::DrawRect(Rect r, RGBColor c) {
-    Transform(r);
+    r.topLeft = Transform(r.topLeft);
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setFillColor(sf::Color(c.r, c.g, c.b));
+    rectangle.setRotation(sf::radians(contextRotation));
     rectangle.setPosition({r.topLeft.x, r.topLeft.y});
     mWindow->draw(rectangle);
 }
@@ -79,7 +80,7 @@ void DrawContext::DrawRect(Rect r, RGBColor c) {
  * @param width: Width of the outline to be drawn.
  * @param c: Color of the outline to be drawn.
  */
-void DrawContext::FrameRect(Rect r, float width, RGBColor c) {
+void DrawContext::FrameRect(Rect r, float width, RGBColor c) { //still highly untested especially with rotated objects
     r = Transform(r);
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setOutlineColor(sf::Color(c.r, c.g, c.b));
