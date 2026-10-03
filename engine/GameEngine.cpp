@@ -96,7 +96,7 @@ void GameEngine::Run() {
             // keydown
             if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
                 if (mKeydown->contains((int)keyPressed->code)) {
-                    context->mNotificationManager->Notify(mKeyup->at((int)keyPressed->code));
+                    context->mNotificationManager->Notify(mKeydown->at((int)keyPressed->code));
                 }
             }
 
