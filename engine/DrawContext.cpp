@@ -181,18 +181,17 @@ Point2D DrawContext::ReverseTransform(Point2D p) const {
  */
 Rect DrawContext::Transform(Rect r) const {
     Point2D newTopLeft = Transform(r.topLeft);
-    r.topLeft = newTopLeft;
-    Point2D newSecondPt = Transform(Point2D(r.topLeft.x + r.width, r.topLeft.y));
-    Point2D newThirdPt = Transform(Point2D(r.topLeft.x, r.topLeft.y + r.height));
-    Point2D newFourthPt = Transform(Point2D(r.topLeft.x + r.width, r.topLeft.y + r.height));
+    Point2D newSecondPt = Transform(Point2D((r.topLeft.x + r.width), r.topLeft.y));
+    Point2D newThirdPt = Transform(Point2D(r.topLeft.x, (r.topLeft.y + r.height)));
+    Point2D newFourthPt = Transform(Point2D((r.topLeft.x + r.width), (r.topLeft.y + r.height)));
 
     Rect boundingBox;
-    boundingBox.topLeft.x = std::min({r.topLeft.x, newSecondPt.x, newThirdPt.x, newFourthPt.x});
-    boundingBox.topLeft.y = std::min({r.topLeft.y, newSecondPt.y, newThirdPt.y, newFourthPt.y});
-    boundingBox.width =
-        std::max({r.topLeft.x, newSecondPt.x, newThirdPt.x, newFourthPt.x}) - boundingBox.topLeft.x;
-    boundingBox.height =
-        std::max({r.topLeft.y, newSecondPt.y, newThirdPt.y, newFourthPt.y}) - boundingBox.topLeft.y;
+    boundingBox.topLeft.x = std::min({newTopLeft.x, newSecondPt.x, newThirdPt.x, newFourthPt.x});
+    boundingBox.topLeft.y = std::min({newTopLeft.y, newSecondPt.y, newThirdPt.y, newFourthPt.y});
+    boundingBox.width = std::max({newTopLeft.x, newSecondPt.x, newThirdPt.x, newFourthPt.x}) -
+                        boundingBox.topLeft.x;
+    boundingBox.height = std::max({newTopLeft.y, newSecondPt.y, newThirdPt.y, newFourthPt.y}) -
+                         boundingBox.topLeft.y;
     return boundingBox;
 }
 
