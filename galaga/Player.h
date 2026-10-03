@@ -46,6 +46,7 @@ private:
 
     bool isAlive;
     std::vector<CMPUT350::Shape> selfShapes;
+    float rotation = 0;
 };
 
 #endif
