@@ -15,7 +15,7 @@ DrawContext::DrawContext(std::shared_ptr<sf::RenderWindow> window, std::shared_p
  */
 void DrawContext::DrawCenteredText(const std::string &text, int pixelSize, Point2D p, RGBColor c) {
     // https://stackoverflow.com/questions/27806077/sfml-drawing-centered-text#comment44029433_27806198
-    //p = Transform(p);
+    p = Transform(p);
     sf::Text textstring(*mFont);
     textstring.setString(text);
     textstring.setCharacterSize(pixelSize);
@@ -33,7 +33,7 @@ void DrawContext::DrawCenteredText(const std::string &text, int pixelSize, Point
  * @param c: Color to set the text.
  */
 void DrawContext::DrawText(const std::string &text, int pixelSize, Point2D p, RGBColor c) {
-    //p = Transform(p);
+    p = Transform(p);
     sf::Text textstring(*mFont);
     textstring.setString(text);
     textstring.setCharacterSize(pixelSize);
@@ -50,7 +50,7 @@ void DrawContext::DrawText(const std::string &text, int pixelSize, Point2D p, RG
  * @param c: Color of the circle to be drawn.
  */
 void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
-    //p = Transform(p);
+    p = Transform(p);
     sf::CircleShape circle(radius);
     circle.setFillColor(sf::Color(c.r, c.g, c.b));
     circle.setOrigin({radius, radius});
@@ -65,7 +65,7 @@ void DrawContext::DrawCircle(Point2D p, float radius, RGBColor c) {
  * @param c: Color of the rectangle to be drawn.
  */
 void DrawContext::DrawRect(Rect r, RGBColor c) {
-    //r = Transform(r);
+    r = Transform(r);
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setFillColor(sf::Color(c.r, c.g, c.b));
     rectangle.setPosition({r.topLeft.x, r.topLeft.y});
@@ -80,7 +80,7 @@ void DrawContext::DrawRect(Rect r, RGBColor c) {
  * @param c: Color of the outline to be drawn.
  */
 void DrawContext::FrameRect(Rect r, float width, RGBColor c) {
-    //r = Transform(r);
+    r = Transform(r);
     sf::RectangleShape rectangle({r.width, r.height});
     rectangle.setOutlineColor(sf::Color(c.r, c.g, c.b));
     rectangle.setFillColor(sf::Color::Transparent);
@@ -102,8 +102,8 @@ void DrawContext::FrameRect(Rect r, float width, RGBColor c) {
  * relative to the world offset and rendered onto the associated window.
  */
 void DrawContext::DrawLine(Point2D from, Point2D to, float width, RGBColor c) {
-    //from = Transform(from);
-    //to = Transform(to);
+    from = Transform(from);
+    to = Transform(to);
     float length = Line(from, to).Length();
     float fromx_1 = from.x - (width / 2) * ((to.y - from.y) / length);
     float fromy_1 = from.y + (width / 2) * ((to.x - from.x) / length);
@@ -177,29 +177,11 @@ Point2D DrawContext::ReverseTransform(Point2D p) const {
  * @return Rectangle of bounding box after rotation.
  */
 Rect DrawContext::Transform(Rect r) const {
-    float point1Radius = r.topLeft.Distance({0, 0});
-    Point2D newTopLeft = 
-        {std::cos((std::acos(r.topLeft.x / point1Radius)) + contextRotation) * point1Radius,
-        std::sin((std::asin(r.topLeft.y / point1Radius)) + contextRotation) * point1Radius};
+    Point2D newTopLeft = Transform(r.topLeft);
     r.topLeft = newTopLeft;
-    float point2Radius = (r.topLeft + r.width).Distance({0, 0});
-    Point2D newSecondPt = {
-        std::cos((std::acos((r.topLeft + r.width).x / point2Radius)) + contextRotation) *
-            point2Radius,
-        std::sin((std::asin((r.topLeft + r.width).y / point2Radius)) + contextRotation) *
-            point2Radius};
-    float point3Radius = (r.topLeft + r.height).Distance({0, 0});
-    Point2D newThirdPt = {
-        std::cos((std::acos((r.topLeft + r.height).x / point3Radius)) + contextRotation) *
-            point3Radius,
-        std::sin((std::asin((r.topLeft + r.height).y / point3Radius)) + contextRotation) *
-            point3Radius};
-    float point4Radius = (r.topLeft + r.width + r.height).Distance({0, 0});
-    Point2D newFourthPt = {
-        std::cos((std::acos((r.topLeft + r.width + r.height).x / point4Radius)) + contextRotation) *
-            point4Radius,
-        std::sin((std::asin((r.topLeft + r.width + r.height).y / point4Radius)) + contextRotation) *
-            point4Radius};
+    Point2D newSecondPt = Transform(Point2D(r.topLeft.x + r.width, r.topLeft.y));
+    Point2D newThirdPt = Transform(Point2D(r.topLeft.x, r.topLeft.y + r.height));
+    Point2D newFourthPt = Transform(Point2D(r.topLeft.x + r.width, r.topLeft.y + r.height));
 
     Rect boundingBox;
     boundingBox.topLeft.x = std::min({r.topLeft.x, newSecondPt.x, newThirdPt.x, newFourthPt.x});
