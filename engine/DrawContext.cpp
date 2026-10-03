@@ -145,7 +145,10 @@ void DrawContext::SetContextRotation(float rotation) { contextRotation = rotatio
  *
  * @return Point2D of point in screen space
  */
-Point2D DrawContext::Transform(Point2D p) const { return p + contextOffset; }
+Point2D DrawContext::Transform(Point2D p) const { 
+    return Point2D(((p.x * cos(contextRotation) - p.y * sin(contextRotation)) + contextOffset.x),
+                   ((p.x * sin(contextRotation) + p.y * cos(contextRotation)) + contextOffset.y));
+}
 
 /**
  * @brief Transforms a point from screen space to object space.
@@ -154,7 +157,10 @@ Point2D DrawContext::Transform(Point2D p) const { return p + contextOffset; }
  *
  * @return Point2D of point in local object space
  */
-Point2D DrawContext::ReverseTransform(Point2D p) const { return p - contextOffset; } //"multiplying by the inverted transform matrix"??
+Point2D DrawContext::ReverseTransform(Point2D p) const { 
+    return Point2D(((p.x - contextOffset.x) * (cos(contextRotation)) + ((p.y - contextOffset.y) * sin(contextRotation))),
+                   ((p.x - contextOffset.x) * (cos(contextRotation)) - ((p.y - contextOffset.y) * sin(contextRotation))));
+} 
 
 /**
  * @brief Rotates rectangle (changes topLeft) and computes new bounding box after rotation
