@@ -155,11 +155,20 @@ void GameEngine::Run() {
         for (const std::shared_ptr<GameObject>& i : *mObjects) {
             std::shared_ptr<GraphicsObject> obj = std::dynamic_pointer_cast<GraphicsObject>(i);
             if (obj == nullptr) { continue; }
-            //printf("drawing foreground\n");
 
             context->ScreenContext->SetContextRotation(obj->GetRotation());
             context->ScreenContext->SetContextOffset(obj->GetLocation());
             obj->RenderForeground(context.get());
+        }
+
+        // (1b) Render GUI
+        for (const std::shared_ptr<GameObject>& i : *mObjects) {
+            std::shared_ptr<GraphicsObject> obj = std::dynamic_pointer_cast<GraphicsObject>(i);
+            if (obj == nullptr) {
+                continue;
+            }
+
+            obj->RenderUI(context.get());
         }
 
         // Actually render to window
