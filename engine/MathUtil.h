@@ -148,9 +148,14 @@ struct Point2D {
         // https://allenchou.net/2013/07/cross-product-of-2d-vectors/
         return (a.x*b.y)-(a.y*b.x);
     }
+    /**
+     * @brief Normalizes vector to create a unit vector
+     */
     void Normalize() {
-        // TODO: write this code
         float length = std::sqrt((this->x * this->x) + (this->y * this->y));
+        if (isnan(length) || length == 0) {
+            return;
+        }
         *this /= length;
     }
 };
