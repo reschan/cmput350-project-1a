@@ -33,7 +33,9 @@ public:
 private:
     bool player;
     CMPUT350::Point2D location;
+    CMPUT350::Point2D globalLocation;
     CMPUT350::Point2D heading;
+    CMPUT350::Line bulletBody;
     float length;
     float velocity;
     bool isAlive;
