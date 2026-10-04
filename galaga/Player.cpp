@@ -43,7 +43,8 @@ void Player::Initialize(CMPUT350::GameContext* context) {
 void Player::Update(CMPUT350::GameContext* context) { 
     GetBounds();
     if (flag_shoot && trackingBullet.size() < bullets) {
-        auto bullet = std::make_shared<Bullet>(center, center, true);
+        auto bullet =
+            std::make_shared<Bullet>(center, CMPUT350::Point2D(sin(GetRotation()), -cos(GetRotation())), true);
         context->mEngineView->AddGameObject(bullet);
         std::weak_ptr<Bullet> t_bullet = bullet;
         trackingBullet.push_back(bullet);
