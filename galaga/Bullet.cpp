@@ -54,7 +54,7 @@ void Bullet::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& ob
     if (enemy != nullptr) {
         CMPUT350::Rect intersection = this->bounds;
         intersection &= enemy->GetBounds();
-        std::cout << intersection << std::endl;
+        //std::cout << intersection << std::endl;
         if (!(intersection.width <= 0 || intersection.height <= 0)) {
             enemy->Kill();
         }
