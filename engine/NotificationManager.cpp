@@ -1,5 +1,8 @@
 #include "NotificationManager.h"
 #include <unordered_map>
+#include <iostream>
+
+// TODO: implement history saving and playback.
 
 namespace CMPUT350 {
 
@@ -26,6 +29,10 @@ void NotificationManager::Unregister(std::weak_ptr<GameObject> object, const std
 }
 
 void NotificationManager::Notify(const std::string& message) {
+    if (!mListeners.contains(message)) {
+        return;
+    }
+
     for (const std::weak_ptr<GameObject> obj : mListeners.at(message)) {
         if (auto p = obj.lock()) {
             p->ReceiveNotification(message);
