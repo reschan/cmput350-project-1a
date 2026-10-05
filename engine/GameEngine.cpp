@@ -86,9 +86,16 @@ bool GameEngine::ComputeCollision(const Rect a, const Rect b, Point2D* crossPt) 
     return true;
 }
 
-bool GameEngine::ComputeCollision(const Rect a, const Circle b, Point2D* crossPt) { 
-    
-    return true; 
+bool GameEngine::ComputeCollision(const Rect a, const Circle b, Point2D* crossPt) {
+    Line a1(a.topLeft, Point2D(a.topLeft.x + a.width, a.topLeft.y));
+    Line a2(a.topLeft, Point2D(a.topLeft.x, a.topLeft.y + a.height));
+    Line a3(Point2D(a.topLeft.x + a.width, a.topLeft.y),
+            Point2D(a.topLeft.x + a.width, a.topLeft.y + a.height));
+    Line a4(Point2D(a.topLeft.x, a.topLeft.y + a.height),
+            Point2D(a.topLeft.x + a.width, a.topLeft.y + a.height));
+
+    return a.IsInside(b.center) || ComputeCollision(b, a1) || ComputeCollision(b, a2) ||
+           ComputeCollision(b, a3) || ComputeCollision(b, a4);
 }
 
 bool GameEngine::ComputeCollision(const Rect a, const Line b, Point2D* crossPt) { 
@@ -190,8 +197,13 @@ void GameEngine::Run() {
                 
 
                 // determine collisions
-                if (ComputeCollision(obj1->GetBounds(), obj2->GetBounds())) {
-                    obj1->CollisionEnter(obj2);
+                Point2D *crossPt = nullptr;
+                if (ComputeCollision(obj1->GetBounds(), obj2->GetBounds(), crossPt)) {
+                    if (crossPt != nullptr) {
+                        obj1->CollisionEnter(obj2, *crossPt);
+                    } else {
+                        obj1->CollisionEnter(obj2);
+                    }
                 }
             }
         }
