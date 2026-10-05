@@ -23,7 +23,25 @@ public:
     float GetRotation() const override;
 
 private:
+    void MapKeydown(CMPUT350::GameContext* context, int key, std::string notification);
+    void MapKeyup(CMPUT350::GameContext* context, int key, std::string notification);
+    int state = 0;
+    // States:
+    // 0 - Main menu
+    // 2 - Initialize game
+    // 3 - Playing
+    // 4 - 
+
+    int score = 0;
+    int lives = 0;
+    int coins = 0;
+    int time = 0;
+    int level = 1;
+    int wave = 0;
     bool isAlive;
+
+    std::weak_ptr<CMPUT350::GameObject> shipCache;
+    std::vector<std::weak_ptr<CMPUT350::GameObject>> enemyCache;
 };
 
 #endif

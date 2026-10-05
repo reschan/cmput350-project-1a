@@ -39,6 +39,8 @@ private:
     int width = 40;
     int height = 40;
     int speed;
+    bool flag_moveL = false;
+    bool flag_moveR = false;
 
     std::vector<std::weak_ptr<Bullet>> trackingBullet;
     int bullets;

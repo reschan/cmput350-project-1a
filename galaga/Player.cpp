@@ -9,8 +9,10 @@ Player::Player(CMPUT350::Point2D loc) : isAlive(true), center(loc), bullets(2), 
 }
 
 void Player::Initialize(CMPUT350::GameContext* context) {    
-    context->mNotificationManager->Register(context->CurrObject, "MoveLeft");
-    context->mNotificationManager->Register(context->CurrObject, "MoveRight");
+    context->mNotificationManager->Register(context->CurrObject, "MoveLeftStart");
+    context->mNotificationManager->Register(context->CurrObject, "MoveLeftEnd");
+    context->mNotificationManager->Register(context->CurrObject, "MoveRightStart");
+    context->mNotificationManager->Register(context->CurrObject, "MoveRightEnd");
     context->mNotificationManager->Register(context->CurrObject, "Shoot");
 
     int side_rect_width = width / 4;
@@ -50,6 +52,12 @@ void Player::Update(CMPUT350::GameContext* context) {
         trackingBullet.push_back(bullet);
     }
     flag_shoot = false;
+    if (flag_moveL) {
+        this->center.x -= speed;
+    }
+    if (flag_moveR) {
+        this->center.x += speed;
+    }
 }
 
 void Player::LateUpdate(CMPUT350::GameContext* context) {
@@ -112,14 +120,22 @@ bool Player::IsAlive() const
 
 void Player::ReceiveNotification(const std::string& key) {
     // TODO: write uwu
-    std::cout << "Player: notification received: " << key;
-    if (key == "MoveLeft") {
+    std::cout << "Player: notification received: " << key << "\n";
+    if (key == "MoveLeftStart") {
         std::cout << "Player: MoveLeft\n";
-        this->center.x -= speed;
-    } else if (key == "MoveRight") {
+        flag_moveL = true;
+    }
+    if (key == "MoveLeftEnd") {
+        flag_moveL = false;
+    }
+    if (key == "MoveRightStart") {
         std::cout << "Player: MoveRight\n";
-        this->center.x += speed;
-    } else if (key == "Shoot") {
+        flag_moveR = true;
+    } 
+    if (key == "MoveRightEnd") {
+        flag_moveR = false;
+    }
+    if (key == "Shoot") {
         flag_shoot = true;
     }
 }
