@@ -71,6 +71,7 @@ GameEngine::const_iterator GameEngine::begin() const { return mObjects->begin();
 GameEngine::const_iterator GameEngine::end() const { return mObjects->end(); }
 
 bool GameEngine::ComputeCollision(const Rect a, const Rect b, Point2D* crossPt) {
+    crossPt = nullptr;
     if (a.topLeft.x + a.width <= b.topLeft.x) {
         return false;
     } 
@@ -87,6 +88,7 @@ bool GameEngine::ComputeCollision(const Rect a, const Rect b, Point2D* crossPt) 
 }
 
 bool GameEngine::ComputeCollision(const Rect a, const Circle b, Point2D* crossPt) {
+    crossPt = nullptr;
     Line a1(a.topLeft, Point2D(a.topLeft.x + a.width, a.topLeft.y));
     Line a2(a.topLeft, Point2D(a.topLeft.x, a.topLeft.y + a.height));
     Line a3(Point2D(a.topLeft.x + a.width, a.topLeft.y),
@@ -108,6 +110,7 @@ bool GameEngine::ComputeCollision(const Rect a, const Line b, Point2D* crossPt) 
 }
 
 bool GameEngine::ComputeCollision(const Circle a, const Circle b, Point2D* crossPt) { 
+    crossPt = nullptr;
     return std::pow(b.center.x - a.center.x, 2) + std::pow(b.center.y - a.center.y, 2) <= std::pow(a.radius + b.radius, 2);
 }
 
@@ -123,6 +126,7 @@ bool GameEngine::ComputeCollision(const Line a, const Line b, Point2D* crossPt) 
 }
 
 bool GameEngine::ComputeCollision(const Circle a, const Rect b, Point2D* crossPt) {
+    crossPt = nullptr;
     return ComputeCollision(b, a, crossPt);
 }
 bool GameEngine::ComputeCollision(const Line a, const Rect b, Point2D* crossPt) {
@@ -197,10 +201,10 @@ void GameEngine::Run() {
                 
 
                 // determine collisions
-                Point2D *crossPt = nullptr;
-                if (ComputeCollision(obj1->GetBounds(), obj2->GetBounds(), crossPt)) {
-                    if (crossPt != nullptr) {
-                        obj1->CollisionEnter(obj2, *crossPt);
+                Point2D crossPt;
+                if (ComputeCollision(obj1->GetBounds(), obj2->GetBounds(), &crossPt)) {
+                    if (&crossPt != nullptr) {
+                        obj1->CollisionEnter(obj2, crossPt);
                     } else {
                         obj1->CollisionEnter(obj2);
                     }
