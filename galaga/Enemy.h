@@ -29,6 +29,8 @@ public:
     const CMPUT350::Rect& GetBounds() override;
     const std::vector<CMPUT350::Shape>& GetShapes() override;
 
+    virtual bool Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& target) = 0;
+
 private: 
     CMPUT350::Point2D center;
     CMPUT350::Rect bounds;
@@ -38,6 +40,7 @@ private:
     bool isAlive;
     CMPUT350::Rect body;
     std::vector<CMPUT350::Shape> selfShapes;
+    int health;
 };
 
 
