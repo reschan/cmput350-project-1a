@@ -3,6 +3,8 @@
 
 #include "GraphicsObject.h"
 #include "GameContext.h"
+#include "Enemy.h"
+#include "Player.h"
 
 class Galaga : public CMPUT350::GraphicsObject
 {
@@ -40,8 +42,8 @@ private:
     int wave = 0;
     bool isAlive;
 
-    std::weak_ptr<CMPUT350::GameObject> shipCache;
-    std::vector<std::weak_ptr<CMPUT350::GameObject>> enemyCache;
+    std::weak_ptr<Player> shipCache;
+    std::vector<std::weak_ptr<Enemy>> enemyCache;
 };
 
 #endif

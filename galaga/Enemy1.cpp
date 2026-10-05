@@ -19,7 +19,12 @@ void Enemy1::LateUpdate(CMPUT350::GameContext* context) {
     }
 }
 
-bool Enemy1::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& target) { return true; }
+bool Enemy1::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& target) { 
+    auto bullet = std::make_shared<Bullet>(
+        center, CMPUT350::Point2D(target.x - center.x, target.y - center.y), false);
+    context->mEngineView->AddGameObject(bullet);    
+    return true; 
+}
 
 void Enemy1::RenderBackground(CMPUT350::GameContext* context) {
     //context->ScreenContext->FrameRect(bounds, 5, CMPUT350::Colors::blue);
