@@ -52,7 +52,16 @@ void Bullet::RenderForeground(CMPUT350::GameContext* context) {
 void Bullet::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj) {
     auto enemy = std::dynamic_pointer_cast<Enemy>(obj);
     if (enemy != nullptr) {
+<<<<<<< HEAD
         enemy->Kill();
+=======
+        CMPUT350::Rect intersection = this->bounds;
+        intersection &= enemy->GetBounds();
+        //std::cout << intersection << std::endl;
+        if (!(intersection.width <= 0 || intersection.height <= 0)) {
+            enemy->Kill();
+        }
+>>>>>>> c45e4ea22cf8125a74c04c4d3e3dbf66e8816f8b
     }
 }
 
