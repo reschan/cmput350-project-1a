@@ -3,6 +3,8 @@
 #include "GraphicsObject.h"
 #include "CollisionObject.h"
 #include <iostream> // debug
+#include <cmath>
+#include "MathUtil.h"
 /// @brief
 namespace CMPUT350 {
 #include "FontData.h"
@@ -68,6 +70,64 @@ GameEngine::const_iterator GameEngine::begin() const { return mObjects->begin();
 
 GameEngine::const_iterator GameEngine::end() const { return mObjects->end(); }
 
+bool GameEngine::ComputeCollision(const Rect a, const Rect b, Point2D* crossPt) {
+    if (a.topLeft.x + a.width <= b.topLeft.x) {
+        return false;
+    } 
+    if (b.topLeft.x + b.width <= a.topLeft.x) {
+        return false;
+    }
+    if (a.topLeft.y + a.height <= b.topLeft.y) {
+        return false;
+    }
+    if (b.topLeft.y + b.height <= a.topLeft.y) {
+        return false;
+    }
+    return true;
+}
+
+bool GameEngine::ComputeCollision(const Rect a, const Circle b, Point2D* crossPt) { 
+    
+    return true; 
+}
+
+bool GameEngine::ComputeCollision(const Rect a, const Line b, Point2D* crossPt) { 
+    Point2D rectCenter(a.topLeft.x + (a.width / 2), a.topLeft.y + (a.height / 2));
+    bool res = a.IsInside(b.ClosestPoint(rectCenter));
+    if (res) {
+        *crossPt = b.ClosestPoint(rectCenter);
+    }
+    return res; 
+}
+
+bool GameEngine::ComputeCollision(const Circle a, const Circle b, Point2D* crossPt) { 
+    return std::pow(b.center.x - a.center.x, 2) + std::pow(b.center.y - a.center.y, 2) <= std::pow(a.radius + b.radius, 2);
+}
+
+bool GameEngine::ComputeCollision(const Circle a, const Line b, Point2D* crossPt) { 
+    Point2D closestPt = b.ClosestPoint(a.center);
+    *crossPt = closestPt;
+
+    return closestPt.Distance(a.center) <= a.radius; 
+}
+
+bool GameEngine::ComputeCollision(const Line a, const Line b, Point2D* crossPt) { 
+    return a.Crosses(b, *crossPt); 
+}
+
+bool GameEngine::ComputeCollision(const Circle a, const Rect b, Point2D* crossPt) {
+    return ComputeCollision(b, a, crossPt);
+}
+bool GameEngine::ComputeCollision(const Line a, const Rect b, Point2D* crossPt) {
+    return ComputeCollision(b, a, crossPt);
+}
+bool GameEngine::ComputeCollision(const Line a, const Circle b, Point2D* crossPt) {
+    return ComputeCollision(b, a, crossPt);
+}
+
+
+
+
 /**
  * @method Run
  * @arguments None
@@ -127,7 +187,12 @@ void GameEngine::Run() {
                 std::shared_ptr<CollisionObject> obj2 = std::dynamic_pointer_cast<CollisionObject>(j);
                 if (obj2 == nullptr || obj1 == obj2) { continue; } // check if its not itself
 
-                obj1->CollisionEnter(obj2);
+                
+
+                // determine collisions
+                if (ComputeCollision(obj1->GetBounds(), obj2->GetBounds())) {
+                    obj1->CollisionEnter(obj2);
+                }
             }
         }
 

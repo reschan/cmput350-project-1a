@@ -10,6 +10,7 @@ class GameEngine;
 #include "GameObject.h"
 #include "MathUtil.h"
 #include <SFML/Graphics.hpp>
+#include <cmath>
 
 namespace CMPUT350 {
 
@@ -33,6 +34,16 @@ public:
     const_iterator cend() const override;
     const_iterator begin() const override;
     const_iterator end() const override;
+
+    bool ComputeCollision(const Rect a, const Rect b, Point2D* crossPt = nullptr);
+    bool ComputeCollision(const Rect a, const Circle b, Point2D* crossPt = nullptr);
+    bool ComputeCollision(const Rect a, const Line b, Point2D *crossPt = nullptr);
+    bool ComputeCollision(const Circle a, const Rect b, Point2D* crossPt = nullptr);
+    bool ComputeCollision(const Circle a, const Circle b, Point2D* crossPt = nullptr);
+    bool ComputeCollision(const Circle a, const Line b, Point2D* crossPt = nullptr);
+    bool ComputeCollision(const Line a, const Rect b, Point2D* crossPt = nullptr);
+    bool ComputeCollision(const Line a, const Circle b, Point2D* crossPt = nullptr);
+    bool ComputeCollision(const Line a, const Line b, Point2D* crossPt = nullptr);
 
     void Run();
 
