@@ -1,4 +1,3 @@
-
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 
@@ -17,8 +16,8 @@ namespace CMPUT350 {
 class DrawContext;
 
 class GameEngine : public EngineView {
-public:
     using const_iterator = tGameObject::const_iterator;
+public:
     GameEngine(unsigned int width, unsigned int height, const std::string& name);
     ~GameEngine();
 
