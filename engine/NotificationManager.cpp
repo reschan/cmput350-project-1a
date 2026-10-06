@@ -1,6 +1,7 @@
 #include "NotificationManager.h"
 #include <unordered_map>
 #include <iostream>
+#include <algorithm>
 
 // TODO: implement history saving and playback.
 
