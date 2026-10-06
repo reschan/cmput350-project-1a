@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include "Bullet.h"
 
-Enemy::Enemy(CMPUT350::Point2D loc) { 
+Enemy::Enemy(CMPUT350::Point2D loc, const std::vector<CMPUT350::Point2D>& path) { 
     this->center = loc; 
 }
 
