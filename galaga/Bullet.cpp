@@ -41,7 +41,7 @@ void Bullet::LateUpdate(CMPUT350::GameContext* context)
 
 void Bullet::RenderBackground(CMPUT350::GameContext* context) 
 {
-    context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
+    //context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
     context->ScreenContext->DrawLine(bulletBody.p1, bulletBody.p2, width, CMPUT350::Colors::grey); //move to render background so it looks like its coming out of ship
     selfShapes.push_back(bulletBody);
 }
