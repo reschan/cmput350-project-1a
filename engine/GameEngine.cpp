@@ -73,19 +73,8 @@ GameEngine::const_iterator GameEngine::end() const { return mObjects->end(); }
 
 bool GameEngine::ComputeCollision(const Rect a, const Rect b, Point2D* crossPt) {
     crossPt = nullptr;
-    if (a.topLeft.x + a.width <= b.topLeft.x) {
-        return false;
-    } 
-    if (b.topLeft.x + b.width <= a.topLeft.x) {
-        return false;
-    }
-    if (a.topLeft.y + a.height <= b.topLeft.y) {
-        return false;
-    }
-    if (b.topLeft.y + b.height <= a.topLeft.y) {
-        return false;
-    }
-    return true;
+    return a.topLeft.x < b.topLeft.x + b.width && a.topLeft.x + a.width > b.topLeft.x &&
+           a.topLeft.y < b.topLeft.y + b.height && a.topLeft.y + a.height > b.topLeft.y;
 }
 
 bool GameEngine::ComputeCollision(const Rect a, const Circle b, Point2D* crossPt) {
