@@ -41,7 +41,7 @@ void Bullet::LateUpdate(CMPUT350::GameContext* context)
 
 void Bullet::RenderBackground(CMPUT350::GameContext* context) 
 {
-    //context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
+    context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
     context->ScreenContext->DrawLine(bulletBody.p1, bulletBody.p2, width, CMPUT350::Colors::grey); //move to render background so it looks like its coming out of ship
     selfShapes.push_back(bulletBody);
 }
@@ -52,6 +52,9 @@ void Bullet::RenderForeground(CMPUT350::GameContext* context) {
 void Bullet::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj) {
     auto enemy = std::dynamic_pointer_cast<Enemy>(obj);
     if (enemy != nullptr) {
+        std::cout << "globalLocation: " << globalLocation << std::endl;
+        std::cout << "bulletBody.p1: " << bulletBody.p1 << std::endl;
+        std::cout << "bulletBody.p2: " << bulletBody.p2 << std::endl;
         Kill();
     }
 }
@@ -81,8 +84,8 @@ const CMPUT350::Rect& Bullet::GetBounds()
 {
     // TODO: Update code
     this->bounds = CMPUT350::Rect({0, 0}, 0, 0);
-    this->bounds |= bulletBody.p1 + globalLocation;
-    this->bounds |= bulletBody.p2 + globalLocation;
+    this->bounds |= bulletBody.p1;
+    this->bounds |= bulletBody.p2;
     this->bounds.width = width;
     this->bounds.height = length;
     bounds.topLeft.x = bounds.topLeft.x - (width / 2);
