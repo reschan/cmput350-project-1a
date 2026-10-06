@@ -34,6 +34,7 @@ public:
     const_iterator begin() const override;
     const_iterator end() const override;
 
+    // helper overloaded function to calculate collisions without checking class type for 20 billion times
     bool ComputeCollision(const Rect a, const Rect b, Point2D* crossPt = nullptr);
     bool ComputeCollision(const Rect a, const Circle b, Point2D* crossPt = nullptr);
     bool ComputeCollision(const Rect a, const Line b, Point2D *crossPt = nullptr);
@@ -43,6 +44,11 @@ public:
     bool ComputeCollision(const Line a, const Rect b, Point2D* crossPt = nullptr);
     bool ComputeCollision(const Line a, const Circle b, Point2D* crossPt = nullptr);
     bool ComputeCollision(const Line a, const Line b, Point2D* crossPt = nullptr);
+
+    // helper overloaded function to calculate reverse transform without checking class type for 40 billion times
+    void ComputeRTransform(Rect& x);
+    void ComputeRTransform(Circle& x);
+    void ComputeRTransform(Line& x);
 
     void Run();
 

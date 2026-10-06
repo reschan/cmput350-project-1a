@@ -126,6 +126,16 @@ bool GameEngine::ComputeCollision(const Line a, const Circle b, Point2D* crossPt
     return ComputeCollision(b, a, crossPt);
 }
 
+void GameEngine::ComputeRTransform(Rect& x) {
+    x.topLeft = context->ScreenContext->ReverseTransform(x.topLeft);
+}
+void GameEngine::ComputeRTransform(Circle& x) {
+    x.center = context->ScreenContext->ReverseTransform(x.center);
+}
+void GameEngine::ComputeRTransform(Line& x) {
+    x.p1 = context->ScreenContext->ReverseTransform(x.p1);
+    x.p2 = context->ScreenContext->ReverseTransform(x.p2);
+}
 
 /**
  * @method Run
@@ -186,11 +196,19 @@ void GameEngine::Run() {
                 std::shared_ptr<CollisionObject> obj2 = std::dynamic_pointer_cast<CollisionObject>(j);
                 if (obj2 == nullptr || obj1 == obj2) { continue; } // check if its not itself
 
+                context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                auto a = obj1->GetBounds();
+                ComputeRTransform(a);
                 
+                context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                auto b = obj2->GetBounds();
+                ComputeRTransform(b);
 
                 // determine collisions
                 Point2D crossPt;
-                if (ComputeCollision(obj1->GetBounds(), obj2->GetBounds(), &crossPt)) {
+                if (ComputeCollision(a, b, &crossPt)) {
                     if (&crossPt != nullptr) {
                         obj1->CollisionEnter(obj2, crossPt);
                     } else {
