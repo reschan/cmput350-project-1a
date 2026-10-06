@@ -17,7 +17,7 @@ Point2D Bezier::GetPoint(const std::vector<Point2D>& pts, float t) {
     float segCount = std::floor(pts.size() / 3);
 
     if (t > segCount || t < 0) { throw std::out_of_range("t out of range."); }
-    if (pts.size() % 3 != 1) { throw std::exception("invalid number of point."); }
+    if (pts.size() % 3 != 1) { throw std::runtime_error("invalid number of point."); }
 
     std::span spanPts = std::span<const Point2D>(pts);
     if (t <= 1.0f) {

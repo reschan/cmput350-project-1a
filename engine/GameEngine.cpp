@@ -13,6 +13,7 @@ GameEngine::GameEngine(unsigned int width, unsigned int height, const std::strin
     // load window
     mWindow.reset(new sf::RenderWindow(sf::VideoMode({width, height}), name));
     mWindow->setFramerateLimit(30);
+    mWindow->setKeyRepeatEnabled(false);
 
     // initialize object vectors
     mObjectPending.reset(new std::vector<std::shared_ptr<GameObject>>);
@@ -135,8 +136,6 @@ bool GameEngine::ComputeCollision(const Line a, const Rect b, Point2D* crossPt) 
 bool GameEngine::ComputeCollision(const Line a, const Circle b, Point2D* crossPt) {
     return ComputeCollision(b, a, crossPt);
 }
-
-
 
 
 /**
