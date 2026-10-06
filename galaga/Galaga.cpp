@@ -1,6 +1,7 @@
 #include "Galaga.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Enemy1.h"
 #include "Stars.h"
 #include "Keyboard.h"
 
@@ -52,7 +53,7 @@ void Galaga::Update(CMPUT350::GameContext* context) {
         for (int y = 0; y < 1; y++) {
             for (int x = 0; x < 1; x++) {
                 auto enemy =
-                    std::make_shared<Enemy>(CMPUT350::Point2D(100 + x * 200, 100 + 50 * y));
+                    std::make_shared<Enemy1>(CMPUT350::Point2D(100 + x * 200, 100 + 50 * y));
                 
                 enemyCache.push_back(enemy);
                 context->mEngineView->AddGameObject(enemy);
@@ -76,6 +77,12 @@ void Galaga::Update(CMPUT350::GameContext* context) {
             time = context->currentFrame + 30;
             state = 1;
             level += 1;
+        }
+        for (auto& enemy : enemyCache) {
+            if (!enemy.expired()) {
+                std::shared_ptr<Enemy> enemyPtr = enemy.lock();
+                enemyPtr->Attack(context, shipCache.lock()->GetLocation());
+            }
         }
     }
 }

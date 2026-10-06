@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <algorithm>
+#include <math.h>
 
 namespace CMPUT350 {
 
