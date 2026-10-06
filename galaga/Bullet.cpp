@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include "Enemy.h"
+#include "Player.h"
 #include <iostream>
 #include <math.h>
 
@@ -51,7 +52,14 @@ void Bullet::RenderForeground(CMPUT350::GameContext* context) {
 
 void Bullet::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj) {
     auto enemy = std::dynamic_pointer_cast<Enemy>(obj);
-    if (enemy != nullptr) {
+    if (enemy != nullptr && player) { //enemy collision from player bullet
+        std::cout << "globalLocation: " << globalLocation << std::endl;
+        std::cout << "bulletBody.p1: " << bulletBody.p1 << std::endl;
+        std::cout << "bulletBody.p2: " << bulletBody.p2 << std::endl;
+        Kill();
+    }
+    auto player = std::dynamic_pointer_cast<Player>(obj);
+    if (player != nullptr && !player) { // player collision from enemy bullet
         std::cout << "globalLocation: " << globalLocation << std::endl;
         std::cout << "bulletBody.p1: " << bulletBody.p1 << std::endl;
         std::cout << "bulletBody.p2: " << bulletBody.p2 << std::endl;
