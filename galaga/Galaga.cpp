@@ -49,11 +49,16 @@ void Galaga::Update(CMPUT350::GameContext* context) {
             context->mEngineView->AddGameObject(player);
             shipCache = player;
         }
-
+        
         for (int y = 0; y < 1; y++) {
             for (int x = 0; x < 1; x++) {
+                std::vector<CMPUT350::Point2D> path;
+                path.push_back(CMPUT350::Point2D(127, 767));
+                path.push_back(CMPUT350::Point2D(599, 779));
+                path.push_back(CMPUT350::Point2D(659, 603));
+                path.push_back(CMPUT350::Point2D(100, 50));
                 auto enemy =
-                    std::make_shared<Enemy1>(CMPUT350::Point2D(100 + x * 200, 100 + 50 * y));
+                    std::make_shared<Enemy1>(CMPUT350::Point2D(100 + x * 200, 100 + 50 * y), path);
                 
                 enemyCache.push_back(enemy);
                 context->mEngineView->AddGameObject(enemy);
