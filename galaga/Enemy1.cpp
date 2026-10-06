@@ -1,44 +1,66 @@
 #include "Enemy.h"
 #include "Enemy1.h"
 #include "Bullet.h"
+#include "Bezier.h"
+
+Enemy1::Enemy1(CMPUT350::Point2D loc, const std::vector<CMPUT350::Point2D>& path)
+    : Enemy(loc, path), width(40), height(25), isAlive(true), health(2), bullets(4), lastFiredFrame(0), path(path) {}
 
 void Enemy1::Initialize(CMPUT350::GameContext* context) {
-    width = 40;
-    height = 25;
-    topLeft = CMPUT350::Point2D(this->center.x - (width / 2), this->center.y - (height / 2));
-    isAlive = true;
-    body = CMPUT350::Rect(this->topLeft, this->width, this->height);
+    pathCurve.reset(new CMPUT350::Bezier(path));
+    center = pathCurve->GetPoint(curveProgress);
+    topLeft = CMPUT350::Point2D(0 - (width / 2), 0 - (height / 2));
+    body = CMPUT350::Rect(topLeft, width, height);
     selfShapes.push_back(body);
-    health = 2;
-    
 }
 
 void Enemy1::LateUpdate(CMPUT350::GameContext* context) {
     if (health == 0) {
         Kill();
     }
+    if (context->currentFrame - lastFiredFrame >= 60) {
+        trackingBullet.clear();
+    }
+    if (curveProgress < 1) {
+        center = pathCurve->GetPoint(curveProgress);
+        //rotation = std::atan(pathCurve->GetSlope(curveProgress).y /
+        //                     pathCurve->GetSlope(curveProgress).x);
+        curveProgress += 0.01f;
+    }
 }
 
 bool Enemy1::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& target) { 
-    auto bullet = std::make_shared<Bullet>(
-        center, CMPUT350::Point2D(target.x - center.x, target.y - center.y), false);
-    context->mEngineView->AddGameObject(bullet);    
-    return true; 
+    if (trackingBullet.size() < bullets && curveProgress >= 1) {
+        auto bullet = std::make_shared<Bullet>(
+            center, CMPUT350::Point2D(target.x - center.x, target.y - center.y), false);
+        context->mEngineView->AddGameObject(bullet);
+        std::weak_ptr<Bullet> t_bullet = bullet;
+        trackingBullet.push_back(bullet);
+        lastFiredFrame = context->currentFrame;
+        return true; 
+    } else {
+        return false;
+    }
 }
 
 void Enemy1::RenderBackground(CMPUT350::GameContext* context) {
     //context->ScreenContext->FrameRect(bounds, 5, CMPUT350::Colors::blue);
-}
-
-void Enemy1::RenderForeground(CMPUT350::GameContext* context) {
     if (health == 2) {
-        context->ScreenContext->DrawRect({this->topLeft, this->width, this->height},
+        context->ScreenContext->DrawRect({topLeft, this->width, this->height},
                                          CMPUT350::Colors::green);
     } else {
-        context->ScreenContext->DrawRect({this->topLeft, this->width, this->height},
+        context->ScreenContext->DrawRect({topLeft, this->width, this->height},
                                          CMPUT350::Colors::magenta);
     }
-    
+}
+
+void Enemy1::RenderForeground(CMPUT350::GameContext* context) { 
+    context->ScreenContext->DrawCircle(
+        {topLeft.x + (width / 2) + (width / 4), topLeft.y + (height / 2) + (height / 4)}, 3,
+        CMPUT350::Colors::black);
+    context->ScreenContext->DrawCircle(
+        {topLeft.x + (width / 2) - (width / 4), topLeft.y + (height / 2) + (height / 4)}, 3,
+        CMPUT350::Colors::black);
 }
 
 const CMPUT350::Rect& Enemy1::GetBounds() {
@@ -54,5 +76,11 @@ void Enemy1::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& ob
             health -= 1;
         }
     } 
+}
+
+CMPUT350::Point2D Enemy1::GetLocation() const { return center; }
+
+float Enemy1::GetRotation() const {
+    return rotation;
 }
 
