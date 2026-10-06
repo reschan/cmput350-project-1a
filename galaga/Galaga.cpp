@@ -59,9 +59,9 @@ void Galaga::Update(CMPUT350::GameContext* context) {
                 path.push_back(CMPUT350::Point2D(100, 50));
                 auto enemy =
                     std::make_shared<Enemy1>(CMPUT350::Point2D(100 + x * 200, 100 + 50 * y), path);
-                
-                enemyCache.push_back(enemy);
-                context->mEngineView->AddGameObject(enemy);
+                std::shared_ptr<Enemy> baseEnemyVersionPtr = enemy;
+                enemyCache.push_back(baseEnemyVersionPtr);
+                context->mEngineView->AddGameObject(baseEnemyVersionPtr);
             }
         }
         state = 3;

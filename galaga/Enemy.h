@@ -3,6 +3,8 @@
 
 #include "CollisionObject.h"
 #include "GameContext.h"
+#include "Bezier.h"
+#include "Bullet.h"
 
 class Enemy : public CMPUT350::CollisionObject
 {
@@ -31,16 +33,24 @@ public:
 
     virtual bool Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& target) = 0;
 
-private: 
+protected:
+    std::vector<std::weak_ptr<Bullet>> trackingBullet;
     CMPUT350::Point2D center;
-    CMPUT350::Rect bounds;
+    int lastFiredFrame;
+    int health;
     CMPUT350::Point2D topLeft;
     int width;
     int height;
+    float curveProgress = 0;
+    CMPUT350::Rect bounds;
+
+private: 
     bool isAlive;
     CMPUT350::Rect body;
     std::vector<CMPUT350::Shape> selfShapes;
-    int health;
+    std::vector<CMPUT350::Point2D> path;
+    std::unique_ptr<CMPUT350::Bezier> pathCurve;
+    float rotation = 0;
 };
 
 
