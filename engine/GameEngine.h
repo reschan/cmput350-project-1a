@@ -17,8 +17,8 @@ namespace CMPUT350 {
 class DrawContext;
 
 class GameEngine : public EngineView {
-    using const_iterator = tGameObject::const_iterator;
 public:
+    using const_iterator = tGameObject::const_iterator;
     GameEngine(unsigned int width, unsigned int height, const std::string& name);
     ~GameEngine();
 
