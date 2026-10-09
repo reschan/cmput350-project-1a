@@ -23,6 +23,9 @@ void Galaga::Initialize(CMPUT350::GameContext* context) {
     context->mNotificationManager->Register(context->CurrObject, "Coin");
     context->mNotificationManager->Register(context->CurrObject, "Start");
     context->mNotificationManager->Register(context->CurrObject, "Reset");
+    context->mNotificationManager->Register(context->CurrObject, "Enemy1Killed");
+    context->mNotificationManager->Register(context->CurrObject, "Enemy2Killed");
+    context->mNotificationManager->Register(context->CurrObject, "Enemy3Killed");
 }
 
 void Galaga::MapKeydown(CMPUT350::GameContext* context, int key, std::string notification) {
@@ -39,6 +42,7 @@ void Galaga::Update(CMPUT350::GameContext* context) {
     }
     if (state == 1) { // info screen
         if (context->currentFrame > time) {
+
             state = 2;
             time = context->currentFrame + 60;
         }
@@ -49,16 +53,20 @@ void Galaga::Update(CMPUT350::GameContext* context) {
             context->mEngineView->AddGameObject(player);
             shipCache = player;
         }
+
         
         state = 3;
     }
     if (state == 3) { // main game loop
         // all enemies died TODO: add condition to check on wave 5
-        if (wave == 5) { // advance level
-            time = context->currentFrame + 30;
+        if (wave == 5 && !enemyCache.size()) { // advance level
+            time = context->currentFrame + 60;
             state = 1;
             level += 1;
             wave = 0;
+            waveFinish = false;
+            waveLen = 0;
+            waveTime = 0;
         }
         if (shipCache.expired() && lives != -1) {
             lives -= 1;
@@ -84,34 +92,41 @@ void Galaga::Update(CMPUT350::GameContext* context) {
         if (!waveFinish && context->currentFrame > waveTime + 60) {
             if (waveLen == 5) {
                 waveFinish = true;
+            } else {
+                for (int i = 0; i < 8; i++) {  // straight waves
+                    // spawn 8 enemies
+                    std::vector<CMPUT350::Point2D> path;
+                    path.push_back(CMPUT350::Point2D(127, 767));
+                    path.push_back(CMPUT350::Point2D(599, 779));
+                    path.push_back(CMPUT350::Point2D(659, 603));
+                    path.push_back(CMPUT350::Point2D(96 * i + 30, 50 * waveLen + 30));
+                    auto enemy = std::make_shared<Enemy1>(CMPUT350::Point2D(0, 0), path);
+                    std::shared_ptr<Enemy> baseEnemyVersionPtr = enemy;
+                    enemyCache.push_back(baseEnemyVersionPtr);
+                    context->mEngineView->AddGameObject(baseEnemyVersionPtr);
+                }
+                waveLen++;
+                waveTime = context->currentFrame;
             }
-            for (int i = 0; i < 8; i++) { // straight waves
-                // spawn 8 enemies
-                std::vector<CMPUT350::Point2D> path;
-                path.push_back(CMPUT350::Point2D(127, 767));
-                path.push_back(CMPUT350::Point2D(599, 779));
-                path.push_back(CMPUT350::Point2D(659, 603));
-                path.push_back(CMPUT350::Point2D(96 * i + 30, 50 * waveLen + 30));
-                auto enemy =
-                    std::make_shared<Enemy1>(CMPUT350::Point2D(0, 0), path);
-                std::shared_ptr<Enemy> baseEnemyVersionPtr = enemy;
-                enemyCache.push_back(baseEnemyVersionPtr);
-                context->mEngineView->AddGameObject(baseEnemyVersionPtr);
-            }
-            waveLen++;
-            waveTime = context->currentFrame;
         }
-
-        for (auto& enemy : enemyCache) { // enemy scripting
-            if (!enemy.expired() && !shipCache.expired() && context->currentFrame > time) {
-                std::shared_ptr<Enemy> enemyPtr = enemy.lock();
-                enemyPtr->Attack(context, shipCache.lock()->GetLocation());
+        if (waveFinish && context->currentFrame > waveTime + 120) {
+            for (auto& enemy : enemyCache) {  // enemy scripting
+                if (!enemy.expired() && !shipCache.expired() && context->currentFrame > time) {
+                    std::shared_ptr<Enemy> enemyPtr = enemy.lock();
+                    enemyPtr->Attack(context, shipCache.lock()->GetLocation());
+                }
             }
         }
     }
     if (state == 4) { // cleanup and restart
         if (context->currentFrame > time) {
+            level = 1;
+            wave = 0;
+            waveFinish = false;
+            waveLen = 0;
+            waveTime = 0;
             state = 0;
+            score = 0;
         }
     }
 }
@@ -183,13 +198,21 @@ void Galaga::ReceiveNotification(const std::string& key) {
     if (key == "Coin") {
         coins++;
     }
-    else if (key == "Start" && state == 0 && coins > 0) {
+    if (key == "Start" && state == 0 && coins > 0) {
         state = 1;
         coins--;
         lives = 3;
         time += 30;
     }
-
+    if (key == "Enemy1Killed") {
+        score += 1000;
+    }
+    if (key == "Enemy2Killed") {
+        score += 2000;
+    }
+    if (key == "Enemy3Killed") {
+        score += 4000;
+    }
 }
 
 void Galaga::RenderBackground(CMPUT350::GameContext* context) {
