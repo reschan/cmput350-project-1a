@@ -4,7 +4,7 @@
 #include "Bezier.h"
 
 Enemy1::Enemy1(CMPUT350::Point2D loc, const std::vector<CMPUT350::Point2D>& path)
-    : Enemy(loc, path), bullets(4), score(100) {
+    : Enemy(loc, path), bullets(4) {
     health = 2;
 }
 
@@ -65,7 +65,21 @@ void Enemy1::RenderForeground(CMPUT350::GameContext* context) {
         CMPUT350::Colors::black);
 }
 
-static int Enemy1::GetScore() { return score; }
+void Enemy1::LateUpdate(CMPUT350::GameContext* context) {
+    if (health == 0) {
+        context->mNotificationManager->Notify("Enemy1Killed");
+        Kill();
+    }
+    if (context->currentFrame - lastFiredFrame >= 60) {
+        trackingBullet.clear();
+    }
+    if (curveProgress < 1) {
+        center = pathCurve->GetPoint(curveProgress);
+        // rotation = std::atan(pathCurve->GetSlope(curveProgress).y /
+        //                      pathCurve->GetSlope(curveProgress).x);
+        curveProgress += 0.01f;
+    }
+}
 
 /* const CMPUT350::Rect& Enemy1::GetBounds() {
     this->bounds = CMPUT350::Rect({0, 0}, 0, 0);

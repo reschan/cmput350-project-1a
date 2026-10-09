@@ -44,11 +44,7 @@ void Enemy::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj
 {
     std::shared_ptr<Bullet> bullet = std::dynamic_pointer_cast<Bullet>(obj);
     if (bullet != nullptr) {
-        std::cout << "enemy collision" << "\n";
         if (bullet->IsPlayerBullet()) {
-            std::cout << "enemy bounds: " << bounds << "\n";
-            std::cout << "bullet bounds: " << bullet->GetBounds() << "\n";
-            std::cout << "enemy location: " << GetLocation() << std::endl;
             health -= 1;
         }
     }
