@@ -4,7 +4,7 @@
 #include "Bezier.h"
 
 Enemy1::Enemy1(CMPUT350::Point2D loc, const std::vector<CMPUT350::Point2D>& path)
-    : Enemy(loc, path), bullets(4) {
+    : Enemy(loc, path), bullets(4), score(100) {
     health = 2;
 }
 
@@ -64,6 +64,8 @@ void Enemy1::RenderForeground(CMPUT350::GameContext* context) {
         {topLeft.x + (width / 2) - (width / 4), topLeft.y + (height / 2) + (height / 4)}, 3,
         CMPUT350::Colors::black);
 }
+
+static int GetScore() { return score; }
 
 /* const CMPUT350::Rect& Enemy1::GetBounds() {
     this->bounds = CMPUT350::Rect({0, 0}, 0, 0);

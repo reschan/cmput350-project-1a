@@ -6,7 +6,9 @@ public:
     bool Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& target) override;
     void RenderForeground(CMPUT350::GameContext* context) override;
     void RenderBackground(CMPUT350::GameContext* context) override;
+    int GetScore();
 
 private: 
     int bullets;
+    int score;
 };
