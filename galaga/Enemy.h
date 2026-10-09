@@ -43,13 +43,13 @@ protected:
     int height;
     float curveProgress = 0;
     CMPUT350::Rect bounds;
+    std::unique_ptr<CMPUT350::Bezier> pathCurve;
 
 private: 
     bool isAlive;
     CMPUT350::Rect body;
     std::vector<CMPUT350::Shape> selfShapes;
     std::vector<CMPUT350::Point2D> path;
-    std::unique_ptr<CMPUT350::Bezier> pathCurve;
     float rotation = 0;
 };
 
