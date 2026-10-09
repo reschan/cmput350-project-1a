@@ -65,7 +65,7 @@ void Enemy1::RenderForeground(CMPUT350::GameContext* context) {
         CMPUT350::Colors::black);
 }
 
-static int GetScore() { return score; }
+static int Enemy1::GetScore() { return score; }
 
 /* const CMPUT350::Rect& Enemy1::GetBounds() {
     this->bounds = CMPUT350::Rect({0, 0}, 0, 0);
