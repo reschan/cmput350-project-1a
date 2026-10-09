@@ -40,6 +40,9 @@ private:
     int time = 0;
     int level = 1;
     int wave = 0;
+    int waveTime = 0;
+    int waveLen = 0;
+    bool waveFinish = false;
     bool isAlive;
 
     std::weak_ptr<Player> shipCache;

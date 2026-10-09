@@ -38,56 +38,80 @@ void Galaga::Update(CMPUT350::GameContext* context) {
         time = context->currentFrame;
     }
     if (state == 1) { // info screen
-
         if (context->currentFrame > time) {
             state = 2;
+            time = context->currentFrame + 60;
         }
     }
-    if (state == 2) {
+    if (state == 2) { // initialize
         if (shipCache.expired()) {
             auto player = std::make_shared<Player>(CMPUT350::Point2D(768 / 2, 900));
             context->mEngineView->AddGameObject(player);
             shipCache = player;
         }
         
-        for (int y = 0; y < 1; y++) {
-            for (int x = 0; x < 1; x++) {
-                std::vector<CMPUT350::Point2D> path;
-                path.push_back(CMPUT350::Point2D(127, 767));
-                path.push_back(CMPUT350::Point2D(599, 779));
-                path.push_back(CMPUT350::Point2D(659, 603));
-                path.push_back(CMPUT350::Point2D(100, 50));
-                auto enemy =
-                    std::make_shared<Enemy1>(CMPUT350::Point2D(100 + x * 200, 100 + 50 * y), path);
-                std::shared_ptr<Enemy> baseEnemyVersionPtr = enemy;
-                enemyCache.push_back(baseEnemyVersionPtr);
-                context->mEngineView->AddGameObject(baseEnemyVersionPtr);
-            }
-        }
         state = 3;
     }
-    if (state == 3) {
+    if (state == 3) { // main game loop
         // all enemies died TODO: add condition to check on wave 5
         if (wave == 5) { // advance level
             time = context->currentFrame + 30;
             state = 1;
             level += 1;
-            shipCache.lock()->Kill();
+            wave = 0;
         }
-        if (shipCache.expired()) {
+        if (shipCache.expired() && lives != -1) {
             lives -= 1;
             state = 1;
-        }
-        if (!enemyCache.size() && wave < 5) {
             time = context->currentFrame + 30;
-            state = 1;
-            level += 1;
         }
-        for (auto& enemy : enemyCache) {
-            if (!enemy.expired()) {
+        if (lives == -1) {
+            for (auto& enemy : enemyCache) {
+                if (!enemy.expired()) {
+                    enemy.lock()->Kill();
+                }
+            }
+            time = context->currentFrame + 60;
+            state = 4;
+        }
+        if (!enemyCache.size() && waveFinish) {
+            wave += 1; // use this to script for 5 wave
+            //spawn next wave
+            // random waves?
+            waveTime = 0;
+            waveLen = 0;
+        }
+        if (!waveFinish && context->currentFrame > waveTime + 60) {
+            if (waveLen == 5) {
+                waveFinish = true;
+            }
+            for (int i = 0; i < 8; i++) { // straight waves
+                // spawn 8 enemies
+                std::vector<CMPUT350::Point2D> path;
+                path.push_back(CMPUT350::Point2D(127, 767));
+                path.push_back(CMPUT350::Point2D(599, 779));
+                path.push_back(CMPUT350::Point2D(659, 603));
+                path.push_back(CMPUT350::Point2D(96 * i + 30, 50 * waveLen + 30));
+                auto enemy =
+                    std::make_shared<Enemy1>(CMPUT350::Point2D(0, 0), path);
+                std::shared_ptr<Enemy> baseEnemyVersionPtr = enemy;
+                enemyCache.push_back(baseEnemyVersionPtr);
+                context->mEngineView->AddGameObject(baseEnemyVersionPtr);
+            }
+            waveLen++;
+            waveTime = context->currentFrame;
+        }
+
+        for (auto& enemy : enemyCache) { // enemy scripting
+            if (!enemy.expired() && !shipCache.expired() && context->currentFrame > time) {
                 std::shared_ptr<Enemy> enemyPtr = enemy.lock();
                 enemyPtr->Attack(context, shipCache.lock()->GetLocation());
             }
+        }
+    }
+    if (state == 4) { // cleanup and restart
+        if (context->currentFrame > time) {
+            state = 0;
         }
     }
 }
@@ -128,6 +152,14 @@ void Galaga::RenderUI(CMPUT350::GameContext* context) {
             CMPUT350::Colors::white);
     }
 
+    if (state == 4) {
+        context->GUIContext->DrawCenteredText(
+            "GAME OVER", 25,
+            CMPUT350::Point2D(context->GUIContext->GetWindowWidth() / 2,
+                              context->GUIContext->GetWindowHeight() / 2),
+            CMPUT350::Colors::white);
+    }
+
     context->GUIContext->DrawCenteredText(
         "SCORE", 25,
         CMPUT350::Point2D(context->GUIContext->GetWindowWidth() / 2, 5),
@@ -135,7 +167,7 @@ void Galaga::RenderUI(CMPUT350::GameContext* context) {
     context->GUIContext->DrawCenteredText(
         std::to_string(score), 25, CMPUT350::Point2D(context->GUIContext->GetWindowWidth() / 2, 35),
         CMPUT350::Colors::white);
-    if (state > 0) {
+    if (state > 0 && state < 4) {
         context->GUIContext->DrawText(
             "LIVES: " + std::to_string(lives), 25,
             CMPUT350::Point2D(5, context->GUIContext->GetWindowHeight() - 5 - 25),
