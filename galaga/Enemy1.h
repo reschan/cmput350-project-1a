@@ -7,7 +7,6 @@ public:
     void RenderForeground(CMPUT350::GameContext* context) override;
     void RenderBackground(CMPUT350::GameContext* context) override;
     void LateUpdate(CMPUT350::GameContext* context) override;
-    static int GetScore();
 
 private: 
     int bullets;
