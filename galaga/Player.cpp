@@ -35,7 +35,7 @@ void Player::Initialize(CMPUT350::GameContext* context) {
     body = CMPUT350::Rect({this->topLeft.x + body_x_offset, this->topLeft.y}, body_width, body_height);
     selfShapes.push_back(body);
     topRect = CMPUT350::Rect({this->topLeft.x + top_rect_x_offset, this->topLeft.y - top_rect_y_offset}, top_rect_width, top_rect_height);
-    selfShapes.push_back(body);
+    selfShapes.push_back(topRect);
     leftRect = CMPUT350::Rect({this->topLeft.x - side_rect_x_offset + tl_center_adjustment, this->topLeft.y + side_rect_y_offset}, side_rect_width, side_rect_height);
     selfShapes.push_back(leftRect);
     rightRect = CMPUT350::Rect({this->topLeft.x + side_rect_x_offset + tl_center_adjustment, this->topLeft.y + side_rect_y_offset}, side_rect_width, side_rect_height);
@@ -88,7 +88,7 @@ bool Player::HandleKeyEvent(CMPUT350::GameContext* context, char key) { // nuke 
             auto bullet = std::make_shared<Bullet>(center, center, true);
             context->mEngineView->AddGameObject(bullet);
             std::weak_ptr<Bullet> t_bullet = bullet;
-            trackingBullet.push_back(bullet);
+            trackingBullet.push_back(t_bullet);
             return true;
         }
     }
