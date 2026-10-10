@@ -127,7 +127,7 @@ bool GameEngine::ComputeCollision(const Line a, const Circle b, Point2D* crossPt
 }
 
 void GameEngine::ComputeRTransform(Rect& x) {
-    x.topLeft = context->ScreenContext->ReverseTransform(x.topLeft);
+    x = context->ScreenContext->Transform(x);
 }
 void GameEngine::ComputeRTransform(Circle& x) {
     x.center = context->ScreenContext->ReverseTransform(x.center);
