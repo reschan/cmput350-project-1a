@@ -3,7 +3,7 @@
 #include "Player.h"
 
 Enemy::Enemy(CMPUT350::Point2D loc, const std::vector<CMPUT350::Point2D>& path)
-    : width(40), height(25), isAlive(true), path(path) {}
+    : width(40), height(25), isAlive(true), path(path), movementRange(30) {}
 
 void Enemy::Initialize(CMPUT350::GameContext* context) {
     pathCurve.reset(new CMPUT350::Bezier(path));
@@ -13,21 +13,17 @@ void Enemy::Initialize(CMPUT350::GameContext* context) {
     selfShapes.push_back(body);
 }
 
-void Enemy::Update(CMPUT350::GameContext* context)
-{ GetBounds(); }
-
-void Enemy::LateUpdate(CMPUT350::GameContext* context) {
-    if (health == 0) {
-        Kill();
-    }
-    if (context->currentFrame - lastFiredFrame >= 60) {
-        trackingBullet.clear();
-    }
-    if (curveProgress < 1) {
-        center = pathCurve->GetPoint(curveProgress);
-        // rotation = std::atan(pathCurve->GetSlope(curveProgress).y /
-        //                      pathCurve->GetSlope(curveProgress).x);
-        curveProgress += 0.01f;
+void Enemy::Update(CMPUT350::GameContext* context) { 
+    GetBounds(); 
+    if (curveProgress >= 1 && formation) {
+        if (!hoverStarted) {
+            originalCenter = center;
+            hoverStarted = true;
+        }
+        center.x = originalCenter.x + std::sin(context->currentFrame * 0.05) * movementRange * hoverProgress;
+        if (hoverProgress < 1) {
+            hoverProgress += 0.02f;
+        }
     }
 }
 
@@ -66,7 +62,6 @@ bool Enemy::IsAlive() const
 }
 
 void Enemy::ReceiveNotification(const std::string& key) {
-    // TODO: write uwu
 }
 
 CMPUT350::Point2D Enemy::GetLocation() const { return center; }

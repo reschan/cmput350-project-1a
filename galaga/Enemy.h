@@ -14,7 +14,7 @@ public:
     // GameObject Functions
     void Initialize(CMPUT350::GameContext* context) override;
     void Update(CMPUT350::GameContext* context) override;
-    void LateUpdate(CMPUT350::GameContext* context) override;
+    void LateUpdate(CMPUT350::GameContext* context) override = 0;
     // bool HandleKeyEvent(CMPUT350::GameContext* context, char key) override;
     bool IsAlive() const override;
     void Kill() override;
@@ -44,6 +44,7 @@ protected:
     float curveProgress = 0;
     CMPUT350::Rect bounds;
     std::unique_ptr<CMPUT350::Bezier> pathCurve;
+    bool formation = true;
 
 private: 
     bool isAlive;
@@ -51,6 +52,10 @@ private:
     std::vector<CMPUT350::Shape> selfShapes;
     std::vector<CMPUT350::Point2D> path;
     float rotation = 0;
+    float movementRange;
+    CMPUT350::Point2D originalCenter;
+    float hoverProgress = 0.0f;
+    bool hoverStarted = false;
 };
 
 
