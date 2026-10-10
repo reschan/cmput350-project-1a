@@ -4,7 +4,7 @@
 #include "Bezier.h"
 
 Enemy1::Enemy1(CMPUT350::Point2D loc, const std::vector<CMPUT350::Point2D>& path)
-    : Enemy(loc, path), bullets(1) {
+    : Enemy(loc, path), bullets(4) {
     health = 2;
 }
 

@@ -9,21 +9,25 @@ Enemy2::Enemy2(CMPUT350::Point2D loc, const std::vector<CMPUT350::Point2D>& path
 }
 
 bool Enemy2::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& target) { 
-    if (trackingBullet.size() < bullets && curveProgress >= 1) {
+    // formation = false;
+    if (shootReady && curveProgress >= 1) {
         auto bullet = std::make_shared<Bullet>(
             center, CMPUT350::Point2D(target.x - center.x, target.y - center.y), false);
         context->mEngineView->AddGameObject(bullet);
         std::weak_ptr<Bullet> t_bullet = bullet;
-        trackingBullet.push_back(bullet);
+        trackingBullet.push_back(t_bullet);
         lastFiredFrame = context->currentFrame;
-        return true; 
+        if (trackingBullet.size() >= bullets) {
+            shootReady = false;
+        }
+        return true;
     } else {
         return false;
     }
 }
 
 void Enemy2::RenderBackground(CMPUT350::GameContext* context) {
-    context->ScreenContext->FrameRect(bounds, 5, CMPUT350::Colors::blue);
+    //context->ScreenContext->FrameRect(bounds, 5, CMPUT350::Colors::blue);
     context->ScreenContext->DrawRect({topLeft, this->width, this->height}, CMPUT350::Colors::cyan);
 }
 
@@ -39,10 +43,16 @@ void Enemy2::RenderForeground(CMPUT350::GameContext* context) {
 void Enemy2::LateUpdate(CMPUT350::GameContext* context) {
     if (health == 0) {
         context->mNotificationManager->Notify("Enemy2Killed");
+        for (const auto& bullet : trackingBullet) {
+            auto ptr = bullet.lock();
+            if (ptr != nullptr) {
+                ptr->Kill();
+            }
+        }
         Kill();
     }
-    if (context->currentFrame - lastFiredFrame >= 60) {
-        trackingBullet.clear();
+    if (context->currentFrame - lastFiredFrame >= 30) {
+        shootReady = true;
     }
     if (curveProgress < 1) {
         center = pathCurve->GetPoint(curveProgress);
