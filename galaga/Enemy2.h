@@ -10,4 +10,5 @@ public:
 
 private: 
     int bullets;
+    std::vector<std::weak_ptr<Bullet>> trackingBullet;
 };

@@ -10,7 +10,7 @@ Enemy1::Enemy1(CMPUT350::Point2D loc, const std::vector<CMPUT350::Point2D>& path
 
 bool Enemy1::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& target) { 
     //formation = false;
-    if (trackingBullet.size() < bullets && shootReady && curveProgress >= 1) {
+    if (shootReady && curveProgress >= 1) {
         auto bullet = std::make_shared<Bullet>(
             center, CMPUT350::Point2D(target.x - center.x, target.y - center.y), false);
         context->mEngineView->AddGameObject(bullet);
