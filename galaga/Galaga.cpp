@@ -4,6 +4,7 @@
 #include "Enemy1.h"
 #include "Stars.h"
 #include "Keyboard.h"
+#include "Bullet.h"
 
 Galaga::Galaga() : isAlive(true) {
 
@@ -99,7 +100,7 @@ void Galaga::Update(CMPUT350::GameContext* context) {
                     path.push_back(CMPUT350::Point2D(127, 767));
                     path.push_back(CMPUT350::Point2D(599, 779));
                     path.push_back(CMPUT350::Point2D(659, 603));
-                    path.push_back(CMPUT350::Point2D(96 * i + 30, 50 * waveLen + 30));
+                    path.push_back(CMPUT350::Point2D(96 * i + 50, 50 * waveLen + 130));
                     auto enemy = std::make_shared<Enemy1>(CMPUT350::Point2D(0, 0), path);
                     std::shared_ptr<Enemy> baseEnemyVersionPtr = enemy;
                     enemyCache.push_back(baseEnemyVersionPtr);
