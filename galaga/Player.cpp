@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Player.h"
 #include "Bullet.h"
+#include "Enemy.h"
 
 Player::Player(CMPUT350::Point2D loc) : isAlive(true), center(loc), bullets(2), speed(5) {
     //topLeft = CMPUT350::Point2D(loc.x - (width / 2), loc.y - (height/2));
@@ -109,7 +110,11 @@ void Player::RenderForeground(CMPUT350::GameContext* context)
 
 void Player::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj) {
     auto bullet = std::dynamic_pointer_cast<Bullet>(obj);
-    if (!bullet->IsPlayerBullet()) {
+    if (bullet != nullptr && !bullet->IsPlayerBullet()) {
+        Kill();
+    }
+    auto enemy = std::dynamic_pointer_cast<Enemy>(obj);
+    if (enemy != nullptr) {
         Kill();
     }
 }
