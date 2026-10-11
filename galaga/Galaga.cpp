@@ -29,6 +29,9 @@ void Galaga::Initialize(CMPUT350::GameContext* context) {
     context->mNotificationManager->Register(context->CurrObject, "Enemy1Killed");
     context->mNotificationManager->Register(context->CurrObject, "Enemy2Killed");
     context->mNotificationManager->Register(context->CurrObject, "Enemy3Killed");
+    context->mNotificationManager->Register(context->CurrObject, "Enemy1ExtraScoreKill");
+    context->mNotificationManager->Register(context->CurrObject, "Enemy2ExtraScoreKill");
+    context->mNotificationManager->Register(context->CurrObject, "Enemy3ExtraScoreKill");
 }
 
 void Galaga::MapKeydown(CMPUT350::GameContext* context, int key, std::string notification) {
