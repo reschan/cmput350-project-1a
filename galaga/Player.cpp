@@ -52,10 +52,10 @@ void Player::Update(CMPUT350::GameContext* context) {
         trackingBullet.push_back(bullet);
     }
     flag_shoot = false;
-    if (flag_moveL) {
+    if (flag_moveL && center.x > 0) {
         this->center.x -= speed;
     }
-    if (flag_moveR) {
+    if (flag_moveR && center.x < context->ScreenContext->GetWindowWidth()) {
         this->center.x += speed;
     }
 }
