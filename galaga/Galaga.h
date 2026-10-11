@@ -42,6 +42,7 @@ private:
     int wave = 0;
     int waveTime = 0;
     int waveLen = 0;
+    int attackTime = 0;
     bool waveFinish = false;
     bool isAlive;
 

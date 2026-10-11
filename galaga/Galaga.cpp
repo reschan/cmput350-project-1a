@@ -96,29 +96,64 @@ void Galaga::Update(CMPUT350::GameContext* context) {
             if (waveLen == 5) {
                 waveFinish = true;
             } else {
-                for (int i = 0; i < 8; i++) {  // straight waves
-                    // spawn 8 enemies
-                    std::vector<CMPUT350::Point2D> path;
-                    path.push_back(CMPUT350::Point2D(127, 767));
-                    path.push_back(CMPUT350::Point2D(599, 779));
-                    path.push_back(CMPUT350::Point2D(659, 603));
-                    path.push_back(CMPUT350::Point2D(96 * i + 50, 50 * waveLen + 130));
-                    auto enemy = std::make_shared<Enemy1>(CMPUT350::Point2D(0, 0), path);
-                    std::shared_ptr<Enemy> baseEnemyVersionPtr = enemy;
-                    enemyCache.push_back(baseEnemyVersionPtr);
-                    context->mEngineView->AddGameObject(baseEnemyVersionPtr);
+                switch (std::rand() % 3) { 
+                    case 0:
+                        for (int i = 0; i < 8; i++) {  // straight waves
+                            // spawn 8 enemies
+                            std::vector<CMPUT350::Point2D> path;
+                            path.push_back(CMPUT350::Point2D(127, 767));
+                            path.push_back(CMPUT350::Point2D(599, 779));
+                            path.push_back(CMPUT350::Point2D(659, 603));
+                            path.push_back(CMPUT350::Point2D(96 * i + 50, 50 * waveLen + 130));
+                            auto enemy = std::make_shared<Enemy1>(CMPUT350::Point2D(0, 0), path);
+                            std::shared_ptr<Enemy> baseEnemyVersionPtr = enemy;
+                            enemyCache.push_back(baseEnemyVersionPtr);
+                            context->mEngineView->AddGameObject(baseEnemyVersionPtr);
+                        }
+                        break;
+                    case 1:
+                        for (int i = 0; i < 8; i++) {  // straight waves
+                            // spawn 8 enemies
+                            std::vector<CMPUT350::Point2D> path;
+                            path.push_back(CMPUT350::Point2D(127, 767));
+                            path.push_back(CMPUT350::Point2D(599, 779));
+                            path.push_back(CMPUT350::Point2D(659, 603));
+                            path.push_back(CMPUT350::Point2D(96 * i + 50, 50 * waveLen + 130));
+                            auto enemy = std::make_shared<Enemy2>(CMPUT350::Point2D(0, 0), path);
+                            std::shared_ptr<Enemy> baseEnemyVersionPtr = enemy;
+                            enemyCache.push_back(baseEnemyVersionPtr);
+                            context->mEngineView->AddGameObject(baseEnemyVersionPtr);
+                        }
+                        break;
+                    case 2:
+                        for (int i = 0; i < 8; i++) {  // straight waves
+                            // spawn 8 enemies
+                            std::vector<CMPUT350::Point2D> path;
+                            path.push_back(CMPUT350::Point2D(127, 767));
+                            path.push_back(CMPUT350::Point2D(599, 779));
+                            path.push_back(CMPUT350::Point2D(659, 603));
+                            path.push_back(CMPUT350::Point2D(96 * i + 50, 50 * waveLen + 130));
+                            auto enemy = std::make_shared<Enemy3>(CMPUT350::Point2D(0, 0), path);
+                            std::shared_ptr<Enemy> baseEnemyVersionPtr = enemy;
+                            enemyCache.push_back(baseEnemyVersionPtr);
+                            context->mEngineView->AddGameObject(baseEnemyVersionPtr);
+                        }
+                        break;
                 }
+                
                 waveLen++;
                 waveTime = context->currentFrame;
             }
         }
-        if (waveFinish && context->currentFrame > waveTime + 120) {
+        if (waveFinish && context->currentFrame > waveTime + 120 &&
+            context->currentFrame > attackTime) {
             for (auto& enemy : enemyCache) {  // enemy scripting
-                if (!enemy.expired() && !shipCache.expired() && context->currentFrame > time) {
+                if (std::rand() % 101 < 10 && !enemy.expired() && !shipCache.expired()) {
                     std::shared_ptr<Enemy> enemyPtr = enemy.lock();
                     enemyPtr->Attack(context, shipCache.lock()->GetLocation());
                 }
             }
+            attackTime = context->currentFrame + 300;
         }
     }
     if (state == 4) { // cleanup and restart
@@ -215,6 +250,15 @@ void Galaga::ReceiveNotification(const std::string& key) {
     }
     if (key == "Enemy3Killed") {
         score += 4000;
+    }
+    if (key == "Enemy1ExtraScoreKill") {
+        score += 2000;
+    }
+    if (key == "Enemy2ExtraScoreKill") {
+        score += 4000;
+    }
+    if (key == "Enemy3ExtraScoreKill") {
+        score += 8000;
     }
 }
 
