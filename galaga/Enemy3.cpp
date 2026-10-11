@@ -9,20 +9,30 @@ Enemy3::Enemy3(CMPUT350::Point2D loc, const std::vector<CMPUT350::Point2D>& path
 }
 
 bool Enemy3::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& target) { 
-    // formation = false;
-    if (shootReady && curveProgress >= 1) {
-        auto bullet = std::make_shared<Bullet>(
-            center, CMPUT350::Point2D(target.x - center.x, target.y - center.y), false);
-        context->mEngineView->AddGameObject(bullet);
-        std::weak_ptr<Bullet> t_bullet = bullet;
-        trackingBullet.push_back(t_bullet);
-        lastFiredFrame = context->currentFrame;
-        if ((trackingBullet.size() % bullets) == 0) {
-            shootReady = false;
+    if (curveProgress >= 1) {
+        formation = false;
+        curveProgress = 0;
+        attackPath.clear();
+        attackPath.push_back(center);
+        attackPath.push_back(CMPUT350::Point2D(target.x + 100 - 500, target.y + 200 + 500));
+        attackPath.push_back(CMPUT350::Point2D(target.x + 100 + 500, target.y + 200 - 500));
+        attackPath.push_back(center);
+        std::cout << attackPath.size() << "\n";
+        pathCurve.reset(new CMPUT350::Bezier(attackPath));
+        if (shootReady) {
+            auto bullet = std::make_shared<Bullet>(
+                center, CMPUT350::Point2D(target.x - center.x, target.y - center.y), false);
+            context->mEngineView->AddGameObject(bullet);
+            std::weak_ptr<Bullet> t_bullet = bullet;
+            trackingBullet.push_back(t_bullet);
+            lastFiredFrame = context->currentFrame;
+            if ((trackingBullet.size() % bullets) == 0) {
+                shootReady = false;
+            }
+            return true;
+        } else {
+            return false;
         }
-        return true;
-    } else {
-        return false;
     }
 }
 
@@ -55,8 +65,18 @@ void Enemy3::LateUpdate(CMPUT350::GameContext* context) {
         shootReady = true;
     }
     if (curveProgress < 1) {
-        center = pathCurve->GetPoint(curveProgress);
-        curveProgress += 0.01f;
+        CMPUT350::Point2D newLocation(pathCurve->GetPoint(curveProgress));
+
+        float dist = newLocation.Distance(center);
+
+        if (dist > 6) {
+            CMPUT350::Point2D newDist = newLocation - center;
+            newDist.Normalize();
+            center += newDist * 6;
+        } else {
+            center = newLocation;
+            curveProgress += 0.01f;
+        }
     }
 }
 

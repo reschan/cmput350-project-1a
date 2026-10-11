@@ -12,4 +12,5 @@ private:
     int bullets;
     std::vector<std::weak_ptr<Bullet>> trackingBullet;
     bool shootReady = true;
+    std::vector<CMPUT350::Point2D> attackPath;
 };

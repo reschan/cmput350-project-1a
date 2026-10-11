@@ -24,6 +24,8 @@ void Enemy::Update(CMPUT350::GameContext* context) {
         if (hoverProgress < 1) {
             hoverProgress += 0.02f;
         }
+    } else if (curveProgress >= 1 && !formation) {
+        formation = true;
     }
 }
 
