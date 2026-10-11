@@ -72,14 +72,15 @@ void Enemy1::LateUpdate(CMPUT350::GameContext* context) {
         
         CMPUT350::Point2D newLocation(pathCurve->GetPoint(curveProgress));
         
-        if (newLocation.Distance(center) > 6) {
-            std::cout << newLocation.Distance(center) << "\n";
+        float dist = newLocation.Distance(center);
+        
+        if (dist > 6) {
+            CMPUT350::Point2D newDist = newLocation - center;
+            newDist.Normalize();
+            center += newDist * 6;
+        } else {
             center = newLocation;
-        } else if (newLocation.Distance(center))
-
-        
-        //center = newLocation;
-        
-        curveProgress += 0.005f;
+            curveProgress += 0.01f;
+        }
     }
 }
