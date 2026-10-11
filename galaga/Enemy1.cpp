@@ -58,7 +58,11 @@ void Enemy1::RenderForeground(CMPUT350::GameContext* context) {
 
 void Enemy1::LateUpdate(CMPUT350::GameContext* context) {
     if (health == 0) {
-        context->mNotificationManager->Notify("Enemy1Killed");
+        if (formation) {
+            context->mNotificationManager->Notify("Enemy1Killed");
+        } else {
+            context->mNotificationManager->Notify("Enemy1ExtraScoreKill");
+        }
         for (const auto& bullet : trackingBullet) {
             auto ptr = bullet.lock();
             if (ptr != nullptr) {
