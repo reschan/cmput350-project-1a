@@ -10,9 +10,30 @@ namespace CMPUT350 {
 
 Bezier::Bezier(const std::vector<Point2D>& pts) : pts(pts) {}
 
+/**
+ * @brief Calculates the curve point given t
+ *
+ * @param t: curve progress
+ * @return Point2D
+ */
 Point2D Bezier::GetPoint(float t) const { return this->GetPoint(pts, t); }
+
+/**
+ * @brief Calculates the curve slope given t
+ *
+ * @param t: curve progress
+ * @return Point2D
+ */
 Point2D Bezier::GetSlope(float t) const { return this->GetSlope(pts, t); }
 
+/**
+ * @brief Calculates the curve point given t
+ *
+ * @param 
+ * t: curve progress
+ * pts: std::vector of bezier points
+ * @return Point2D
+ */
 Point2D Bezier::GetPoint(const std::vector<Point2D>& pts, float t) {
     float segCount = std::floor(pts.size() / 3);
 
@@ -44,6 +65,14 @@ Point2D Bezier::GetPoint(const std::vector<Point2D>& pts, float t) {
     return Point2D(x, y);
 }
 
+/**
+ * @brief Calculates the curve slope given t
+ *
+ * @param
+ * t: curve progress
+ * pts: std::vector of bezier points
+ * @return Point2D
+ */
 Point2D Bezier::GetSlope(const std::vector<Point2D>& pts, float t) {
     float segCount = std::floor(pts.size() / 3);
 
