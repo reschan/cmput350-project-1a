@@ -45,6 +45,5 @@ private:
     std::vector<CMPUT350::Shape> selfShapes;
     float rotation;
     bool destroyed = false;
-    CMPUT350::Point2D destroyedLocation;
 };
 #endif // BULLET_H

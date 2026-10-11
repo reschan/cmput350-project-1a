@@ -41,8 +41,10 @@ void Bullet::Update(CMPUT350::GameContext* context) {
     }
 }
 
-void Bullet::LateUpdate(CMPUT350::GameContext* context)
-{
+void Bullet::LateUpdate(CMPUT350::GameContext* context) {
+    if (destroyed) {
+        Kill();
+    }
 }
 
 // bool Bullet::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //bullet shouldn't need to respond to keyevent
@@ -51,7 +53,7 @@ void Bullet::RenderBackground(CMPUT350::GameContext* context)
 {
     //context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
     if (destroyed) {
-        context->ScreenContext->DrawCircle(destroyedLocation, 3, CMPUT350::Colors::white);
+        context->ScreenContext->DrawCircle(bulletBody.p1, 10, CMPUT350::Colors::yellow);
     } else if (IsPlayerBullet()) {
         context->ScreenContext->DrawLine(bulletBody.p1, bulletBody.p2, width, CMPUT350::Colors::grey);  
     } else {
@@ -82,15 +84,14 @@ void Bullet::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& ob
 void Bullet::CollisionEnter(const std::shared_ptr<CollisionObject>& obj,
                             const CMPUT350::Point2D& collisionPoint) {
     auto enemy = std::dynamic_pointer_cast<Enemy>(obj);
+    //std::cout << collisionPoint << "\n";
     if (enemy != nullptr && player) {  // enemy collision from player bullet
         destroyed = true;
-        destroyedLocation = collisionPoint;
         Kill();
     }
     auto player = std::dynamic_pointer_cast<Player>(obj);
     if (player != nullptr && !(this->player)) {  // player collision from enemy bullet
         destroyed = true;
-        destroyedLocation = collisionPoint;
         Kill();
     }
 }
