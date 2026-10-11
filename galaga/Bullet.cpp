@@ -25,6 +25,7 @@ void Bullet::Initialize(CMPUT350::GameContext* context) {
     rotation = std::atan2(heading.y, heading.x) + std::numbers::pi / 2.0f;
     bulletBody.p1 = location;
     bulletBody.p2 = CMPUT350::Point2D(location.x, -length);
+    selfShapes.push_back(bulletBody);
 }
 
 void Bullet::Update(CMPUT350::GameContext* context) {
@@ -40,8 +41,10 @@ void Bullet::Update(CMPUT350::GameContext* context) {
     }
 }
 
-void Bullet::LateUpdate(CMPUT350::GameContext* context)
-{
+void Bullet::LateUpdate(CMPUT350::GameContext* context) {
+    if (destroyed) {
+        Kill();
+    }
 }
 
 // bool Bullet::HandleKeyEvent(CMPUT350::GameContext* context, char key) { return false; } //bullet shouldn't need to respond to keyevent
@@ -49,12 +52,13 @@ void Bullet::LateUpdate(CMPUT350::GameContext* context)
 void Bullet::RenderBackground(CMPUT350::GameContext* context) 
 {
     //context->ScreenContext->FrameRect(this->bounds, 5, CMPUT350::Colors::blue);
-    if (IsPlayerBullet()) {
+    if (destroyed) {
+        context->ScreenContext->DrawCircle(bulletBody.p1, 10, CMPUT350::Colors::yellow);
+    } else if (IsPlayerBullet()) {
         context->ScreenContext->DrawLine(bulletBody.p1, bulletBody.p2, width, CMPUT350::Colors::grey);  
     } else {
         context->ScreenContext->DrawLine(bulletBody.p1, bulletBody.p2, width, CMPUT350::Colors::red);
     }
-    selfShapes.push_back(bulletBody);
 }
 
 void Bullet::RenderForeground(CMPUT350::GameContext* context) {
@@ -73,6 +77,21 @@ void Bullet::CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& ob
         //std::cout << "globalLocation: " << globalLocation << std::endl;
         //std::cout << "bulletBody.p1: " << bulletBody.p1 << std::endl;
         //std::cout << "bulletBody.p2: " << bulletBody.p2 << std::endl;
+        Kill();
+    }
+}
+
+void Bullet::CollisionEnter(const std::shared_ptr<CollisionObject>& obj,
+                            const CMPUT350::Point2D& collisionPoint) {
+    auto enemy = std::dynamic_pointer_cast<Enemy>(obj);
+    //std::cout << collisionPoint << "\n";
+    if (enemy != nullptr && player) {  // enemy collision from player bullet
+        destroyed = true;
+        Kill();
+    }
+    auto player = std::dynamic_pointer_cast<Player>(obj);
+    if (player != nullptr && !(this->player)) {  // player collision from enemy bullet
+        destroyed = true;
         Kill();
     }
 }
