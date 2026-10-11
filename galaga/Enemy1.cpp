@@ -9,8 +9,16 @@ Enemy1::Enemy1(CMPUT350::Point2D loc, const std::vector<CMPUT350::Point2D>& path
 }
 
 bool Enemy1::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& target) { 
-    //formation = false;
-    if (shootReady && curveProgress >= 1) {
+    formation = false;
+    curveProgress = 0;
+    attackPath.clear();
+    attackPath.push_back(center);
+    attackPath.push_back(CMPUT350::Point2D(target.x - 2, target.y - 2));
+    attackPath.push_back(target);
+    attackPath.push_back(center);
+    std::cout << attackPath.size() << "\n";
+    pathCurve.reset(new CMPUT350::Bezier(attackPath));
+    if (shootReady) {
         auto bullet = std::make_shared<Bullet>(
             center, CMPUT350::Point2D(target.x - center.x, target.y - center.y), false);
         context->mEngineView->AddGameObject(bullet);
