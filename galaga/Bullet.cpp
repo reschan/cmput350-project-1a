@@ -16,7 +16,7 @@ void Bullet::Initialize(CMPUT350::GameContext* context) {
     if (IsPlayerBullet()) {
         velocity = 25.0f;
     } else {
-        velocity = 20.0f;
+        velocity = 25.0f;
     }
     if (heading.x == 0 && heading.y == 0) {
         heading = CMPUT350::Point2D(0, -1);

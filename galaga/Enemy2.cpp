@@ -17,7 +17,7 @@ bool Enemy2::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& tar
         std::weak_ptr<Bullet> t_bullet = bullet;
         trackingBullet.push_back(t_bullet);
         lastFiredFrame = context->currentFrame;
-        if (trackingBullet.size() >= bullets) {
+        if ((trackingBullet.size() % bullets) == 0) {
             shootReady = false;
         }
         return true;

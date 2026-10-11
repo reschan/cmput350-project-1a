@@ -17,7 +17,7 @@ bool Enemy1::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& tar
         std::weak_ptr<Bullet> t_bullet = bullet;
         trackingBullet.push_back(t_bullet);
         lastFiredFrame = context->currentFrame;
-        if (trackingBullet.size() >= bullets) {
+        if ((trackingBullet.size() % bullets) == 0) {
             shootReady = false;
         }
         return true; 
@@ -61,7 +61,17 @@ void Enemy1::LateUpdate(CMPUT350::GameContext* context) {
         shootReady = true;
     }
     if (curveProgress < 1) {
-        center = pathCurve->GetPoint(curveProgress);
-        curveProgress += 0.01f;
+        
+        CMPUT350::Point2D newLocation(pathCurve->GetPoint(curveProgress));
+        
+        if (newLocation.Distance(center) > 6) {
+            std::cout << newLocation.Distance(center) << "\n";
+            center = newLocation;
+        } else if (newLocation.Distance(center))
+
+        
+        //center = newLocation;
+        
+        curveProgress += 0.005f;
     }
 }

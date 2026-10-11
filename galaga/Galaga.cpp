@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Enemy1.h"
+#include "Enemy2.h"
+#include "Enemy3.h"
 #include "Stars.h"
 #include "Keyboard.h"
 #include "Bullet.h"

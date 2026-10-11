@@ -17,7 +17,7 @@ bool Enemy3::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& tar
         std::weak_ptr<Bullet> t_bullet = bullet;
         trackingBullet.push_back(t_bullet);
         lastFiredFrame = context->currentFrame;
-        if (trackingBullet.size() >= bullets) {
+        if ((trackingBullet.size() % bullets) == 0) {
             shootReady = false;
         }
         return true;
@@ -27,7 +27,7 @@ bool Enemy3::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& tar
 }
 
 void Enemy3::RenderBackground(CMPUT350::GameContext* context) {
-    context->ScreenContext->FrameRect(bounds, 5, CMPUT350::Colors::blue);
+    //context->ScreenContext->FrameRect(bounds, 5, CMPUT350::Colors::blue);
     context->ScreenContext->DrawRect({topLeft, this->width, this->height}, CMPUT350::Colors::yellow);
 }
 
