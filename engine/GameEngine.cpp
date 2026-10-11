@@ -251,6 +251,11 @@ void GameEngine::Run() {
 
                                 if (ComputeCollision(a, b, &crossPt)) {
                                     if (&crossPt != nullptr) {
+                                        context->ScreenContext->SetContextRotation(
+                                            obj1->GetRotation());
+                                        context->ScreenContext->SetContextOffset(
+                                            obj1->GetLocation());
+                                        crossPt = context->ScreenContext->ReverseTransform(crossPt);
                                         obj1->CollisionEnter(obj2, crossPt);
                                     } else {
                                         obj1->CollisionEnter(obj2);
@@ -271,6 +276,14 @@ void GameEngine::Run() {
 
                                 if (ComputeCollision(a, b, &crossPt)) {
                                     if (&crossPt != nullptr) {
+                                        context->ScreenContext->SetContextRotation(
+                                            obj1->GetRotation());
+                                        context->ScreenContext->SetContextOffset(
+                                            obj1->GetLocation());
+                                        //std::cout << a << "\n";
+                                        //std::cout << b << "\n";
+                                        //std::cout << crossPt << "\n";
+                                        crossPt = context->ScreenContext->ReverseTransform(crossPt);
                                         obj1->CollisionEnter(obj2, crossPt);
                                     } else {
                                         obj1->CollisionEnter(obj2);
@@ -291,6 +304,11 @@ void GameEngine::Run() {
 
                                 if (ComputeCollision(a, b, &crossPt)) {
                                     if (&crossPt != nullptr) {
+                                        context->ScreenContext->SetContextRotation(
+                                            obj1->GetRotation());
+                                        context->ScreenContext->SetContextOffset(
+                                            obj1->GetLocation());
+                                        crossPt = context->ScreenContext->ReverseTransform(crossPt);
                                         obj1->CollisionEnter(obj2, crossPt);
                                     } else {
                                         obj1->CollisionEnter(obj2);
@@ -313,6 +331,11 @@ void GameEngine::Run() {
 
                                 if (ComputeCollision(a, b, &crossPt)) {
                                     if (&crossPt != nullptr) {
+                                        context->ScreenContext->SetContextRotation(
+                                            obj1->GetRotation());
+                                        context->ScreenContext->SetContextOffset(
+                                            obj1->GetLocation());
+                                        crossPt = context->ScreenContext->ReverseTransform(crossPt);
                                         obj1->CollisionEnter(obj2, crossPt);
                                     } else {
                                         obj1->CollisionEnter(obj2);
@@ -333,6 +356,11 @@ void GameEngine::Run() {
 
                                 if (ComputeCollision(a, b, &crossPt)) {
                                     if (&crossPt != nullptr) {
+                                        context->ScreenContext->SetContextRotation(
+                                            obj1->GetRotation());
+                                        context->ScreenContext->SetContextOffset(
+                                            obj1->GetLocation());
+                                        crossPt = context->ScreenContext->ReverseTransform(crossPt);
                                         obj1->CollisionEnter(obj2, crossPt);
                                     } else {
                                         obj1->CollisionEnter(obj2);
@@ -353,6 +381,11 @@ void GameEngine::Run() {
 
                                 if (ComputeCollision(a, b, &crossPt)) {
                                     if (&crossPt != nullptr) {
+                                        context->ScreenContext->SetContextRotation(
+                                            obj1->GetRotation());
+                                        context->ScreenContext->SetContextOffset(
+                                            obj1->GetLocation());
+                                        crossPt = context->ScreenContext->ReverseTransform(crossPt);
                                         obj1->CollisionEnter(obj2, crossPt);
                                     } else {
                                         obj1->CollisionEnter(obj2);
@@ -375,6 +408,11 @@ void GameEngine::Run() {
 
                                 if (ComputeCollision(a, b, &crossPt)) {
                                     if (&crossPt != nullptr) {
+                                        context->ScreenContext->SetContextRotation(
+                                            obj1->GetRotation());
+                                        context->ScreenContext->SetContextOffset(
+                                            obj1->GetLocation());
+                                        crossPt = context->ScreenContext->ReverseTransform(crossPt);
                                         obj1->CollisionEnter(obj2, crossPt);
                                     } else {
                                         obj1->CollisionEnter(obj2);
@@ -395,6 +433,11 @@ void GameEngine::Run() {
 
                                 if (ComputeCollision(a, b, &crossPt)) {
                                     if (&crossPt != nullptr) {
+                                        context->ScreenContext->SetContextRotation(
+                                            obj1->GetRotation());
+                                        context->ScreenContext->SetContextOffset(
+                                            obj1->GetLocation());
+                                        crossPt = context->ScreenContext->ReverseTransform(crossPt);
                                         obj1->CollisionEnter(obj2, crossPt);
                                     } else {
                                         obj1->CollisionEnter(obj2);
@@ -415,6 +458,11 @@ void GameEngine::Run() {
 
                                 if (ComputeCollision(a, b, &crossPt)) {
                                     if (&crossPt != nullptr) {
+                                        context->ScreenContext->SetContextRotation(
+                                            obj1->GetRotation());
+                                        context->ScreenContext->SetContextOffset(
+                                            obj1->GetLocation());
+                                        crossPt = context->ScreenContext->ReverseTransform(crossPt);
                                         obj1->CollisionEnter(obj2, crossPt);
                                     } else {
                                         obj1->CollisionEnter(obj2);
