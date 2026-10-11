@@ -27,6 +27,7 @@ public:
 
     // Collision Object Functions
     void CollisionEnter(const std::shared_ptr<CMPUT350::CollisionObject>& obj) override;
+    void CollisionEnter(const std::shared_ptr<CollisionObject>& obj, const CMPUT350::Point2D& collisionPoint) override;
     const CMPUT350::Rect& GetBounds() override;
     const std::vector<CMPUT350::Shape>& GetShapes() override;
 
@@ -43,5 +44,7 @@ private:
     CMPUT350::Rect bounds;
     std::vector<CMPUT350::Shape> selfShapes;
     float rotation;
+    bool destroyed = false;
+    CMPUT350::Point2D destroyedLocation;
 };
 #endif // BULLET_H
