@@ -92,6 +92,7 @@ bool GameEngine::ComputeCollision(const Rect a, const Circle b, Point2D* crossPt
 
 bool GameEngine::ComputeCollision(const Rect a, const Line b, Point2D* crossPt) { 
     Point2D rectCenter(a.topLeft.x + (a.width / 2), a.topLeft.y + (a.height / 2));
+    //std::cout << rectCenter << "\n";
     bool res = a.IsInside(b.ClosestPoint(rectCenter));
     if (res) {
         *crossPt = b.ClosestPoint(rectCenter);
@@ -130,11 +131,11 @@ void GameEngine::ComputeRTransform(Rect& x) {
     x = context->ScreenContext->Transform(x);
 }
 void GameEngine::ComputeRTransform(Circle& x) {
-    x.center = context->ScreenContext->ReverseTransform(x.center);
+    x.center = context->ScreenContext->Transform(x.center);
 }
 void GameEngine::ComputeRTransform(Line& x) {
-    x.p1 = context->ScreenContext->ReverseTransform(x.p1);
-    x.p2 = context->ScreenContext->ReverseTransform(x.p2);
+    x.p1 = context->ScreenContext->Transform(x.p1);
+    x.p2 = context->ScreenContext->Transform(x.p2);
 }
 
 /**
@@ -196,23 +197,233 @@ void GameEngine::Run() {
                 std::shared_ptr<CollisionObject> obj2 = std::dynamic_pointer_cast<CollisionObject>(j);
                 if (obj2 == nullptr || obj1 == obj2) { continue; } // check if its not itself
 
-                context->ScreenContext->SetContextRotation(obj1->GetRotation());
-                context->ScreenContext->SetContextOffset(obj1->GetLocation());
-                auto a = obj1->GetBounds();
-                ComputeRTransform(a);
+                //context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                //context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                std::vector<Shape> aShapes = obj1->GetShapes();
+                //ComputeRTransform(a);
                 
-                context->ScreenContext->SetContextRotation(obj2->GetRotation());
-                context->ScreenContext->SetContextOffset(obj2->GetLocation());
-                auto b = obj2->GetBounds();
-                ComputeRTransform(b);
+                //context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                //context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                std::vector<Shape> bShapes = obj2->GetShapes();
+                //ComputeRTransform(b);
 
-                // determine collisions
-                Point2D crossPt;
-                if (ComputeCollision(a, b, &crossPt)) {
-                    if (&crossPt != nullptr) {
-                        obj1->CollisionEnter(obj2, crossPt);
-                    } else {
-                        obj1->CollisionEnter(obj2);
+                // 0: line, 1: rect, 2: circle
+                int aType;
+                int bType;
+                bool collided = false;
+                for (Shape aShape : aShapes) {
+                    if (collided) {
+                        break;
+                    }
+                    for (Shape bShape : bShapes) {
+                        if (collided) {
+                            break;
+                        }
+
+                        if (aShape.t == ShapeType::kLine) {
+                            aType = 0;
+                        } else if (aShape.t == ShapeType::kRect) {
+                            aType = 1;
+                        } else if (aShape.t == ShapeType::kCircle) {
+                            aType = 2;
+                        }
+
+                        if (bShape.t == ShapeType::kLine) {
+                            bType = 0;
+                        } else if (bShape.t == ShapeType::kRect) {
+                            bType = 1;
+                        } else if (bShape.t == ShapeType::kCircle) {
+                            bType = 2;
+                        }
+                        Point2D crossPt;
+                        // determine collisions
+                        if (aType == 0) {
+                            if (bType == 0) {
+                                context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                                Line a = aShape.shape.line;
+                                ComputeRTransform(a);
+
+                                context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                                Line b = bShape.shape.line;
+                                ComputeRTransform(b);
+
+                                if (ComputeCollision(a, b, &crossPt)) {
+                                    if (&crossPt != nullptr) {
+                                        obj1->CollisionEnter(obj2, crossPt);
+                                    } else {
+                                        obj1->CollisionEnter(obj2);
+                                    }
+
+                                    collided = true;
+                                }
+                            } else if (bType == 1) {
+                                context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                                Line a = aShape.shape.line;
+                                ComputeRTransform(a);
+
+                                context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                                Rect b = bShape.shape.rect;
+                                ComputeRTransform(b);
+
+                                if (ComputeCollision(a, b, &crossPt)) {
+                                    if (&crossPt != nullptr) {
+                                        obj1->CollisionEnter(obj2, crossPt);
+                                    } else {
+                                        obj1->CollisionEnter(obj2);
+                                    }
+
+                                    collided = true;
+                                }
+                            } else if (bType == 2) {
+                                context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                                Line a = aShape.shape.line;
+                                ComputeRTransform(a);
+
+                                context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                                Circle b = bShape.shape.circle;
+                                ComputeRTransform(b);
+
+                                if (ComputeCollision(a, b, &crossPt)) {
+                                    if (&crossPt != nullptr) {
+                                        obj1->CollisionEnter(obj2, crossPt);
+                                    } else {
+                                        obj1->CollisionEnter(obj2);
+                                    }
+
+                                    collided = true;
+                                }
+                            }
+                        } else if (aType == 1) {
+                            if (bType == 0) {
+                                context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                                Rect a = aShape.shape.rect;
+                                ComputeRTransform(a);
+
+                                context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                                Line b = bShape.shape.line;
+                                ComputeRTransform(b);
+
+                                if (ComputeCollision(a, b, &crossPt)) {
+                                    if (&crossPt != nullptr) {
+                                        obj1->CollisionEnter(obj2, crossPt);
+                                    } else {
+                                        obj1->CollisionEnter(obj2);
+                                    }
+
+                                    collided = true;
+                                }
+                            } else if (bType == 1) {
+                                context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                                Rect a = aShape.shape.rect;
+                                ComputeRTransform(a);
+
+                                context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                                Rect b = bShape.shape.rect;
+                                ComputeRTransform(b);
+
+                                if (ComputeCollision(a, b, &crossPt)) {
+                                    if (&crossPt != nullptr) {
+                                        obj1->CollisionEnter(obj2, crossPt);
+                                    } else {
+                                        obj1->CollisionEnter(obj2);
+                                    }
+
+                                    collided = true;
+                                }
+                            } else if (bType == 2) {
+                                context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                                Rect a = aShape.shape.rect;
+                                ComputeRTransform(a);
+
+                                context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                                Circle b = bShape.shape.circle;
+                                ComputeRTransform(b);
+
+                                if (ComputeCollision(a, b, &crossPt)) {
+                                    if (&crossPt != nullptr) {
+                                        obj1->CollisionEnter(obj2, crossPt);
+                                    } else {
+                                        obj1->CollisionEnter(obj2);
+                                    }
+
+                                    collided = true;
+                                }
+                            }
+                        } else if (aType == 2) {
+                            if (bType == 0) {
+                                context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                                Circle a = aShape.shape.circle;
+                                ComputeRTransform(a);
+
+                                context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                                Line b = bShape.shape.line;
+                                ComputeRTransform(b);
+
+                                if (ComputeCollision(a, b, &crossPt)) {
+                                    if (&crossPt != nullptr) {
+                                        obj1->CollisionEnter(obj2, crossPt);
+                                    } else {
+                                        obj1->CollisionEnter(obj2);
+                                    }
+
+                                    collided = true;
+                                }
+                            } else if (bType == 1) {
+                                context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                                Circle a = aShape.shape.circle;
+                                ComputeRTransform(a);
+
+                                context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                                Rect b = bShape.shape.rect;
+                                ComputeRTransform(b);
+
+                                if (ComputeCollision(a, b, &crossPt)) {
+                                    if (&crossPt != nullptr) {
+                                        obj1->CollisionEnter(obj2, crossPt);
+                                    } else {
+                                        obj1->CollisionEnter(obj2);
+                                    }
+
+                                    collided = true;
+                                }
+                            } else if (bType == 2) {
+                                context->ScreenContext->SetContextRotation(obj1->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj1->GetLocation());
+                                Circle a = aShape.shape.circle;
+                                ComputeRTransform(a);
+
+                                context->ScreenContext->SetContextRotation(obj2->GetRotation());
+                                context->ScreenContext->SetContextOffset(obj2->GetLocation());
+                                Circle b = bShape.shape.circle;
+                                ComputeRTransform(b);
+
+                                if (ComputeCollision(a, b, &crossPt)) {
+                                    if (&crossPt != nullptr) {
+                                        obj1->CollisionEnter(obj2, crossPt);
+                                    } else {
+                                        obj1->CollisionEnter(obj2);
+                                    }
+
+                                    collided = true;
+                                }
+                            }
+                        }
                     }
                 }
             }
