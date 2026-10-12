@@ -1,0 +1,43 @@
+Significant changes between 1a and 1b that our team decided on includes:
+- Having Rect DrawContext::Transform(Rect r) only calculate the rotated bounding box, but leaving the original r unmodified;
+- Having GameEngine calculate the collision via overloaded functions;
+- Having GameEngine call DrawContext::Transform via overloaded functions in order to shorten code/make code more readable;
+- The collision is calculated in GameEngine via for loops going through the returns of GetShapes() from each CollisionObject instead;
+- Bullet.cpp now has additions to have different velocities for Player vs Enemy bullets, however this was mainly used in testing for us and is not different in final product;
+- When an enemy player collision occurs, the enemy hp is reduced by 1 (though it seems like a kill sometimes as Enemy2 and Enemy3 only has 1HP);
+- Enemies have an internal attack cooldown, making it seem like the bullets are being fired in bursts;
+- We found that the derived Enemy classes (Enemy1, Enemy2, Enemy3), did not have a need for overriding the Initialise function, therefore removed it from the .h;
+- Player now shoots based on the state of a flag (flag_shoot) instead, which is updated when it receives the notification to shoot;
+- We gave the enemies eyes :)
+Everything else implemented in part 1b is according to specifications.
+
+Galaga class game flow:
+The galaga class uses a state system to manage what point the game is at. The states are as follows:
+0: menu screen
+1: info screen (Level, lives)
+2: Initialize game
+3: Main game loop/enemy scripting
+4: Game end (cleanup and restart)
+After state 4, it goes back to state 0.
+
+Documentation of contributions:
+(we kind of did everything at once)
+Trung Tran:
+ - GameEngine collision implementation
+ - Bezier implementation
+ - Galaga class implementation
+ - Notification Manager implementation
+ - Object iteration
+Kasey Chuang:
+ - Player, Enemy (+ enemy variations), Bullet implementation
+   + Implements enemy attacking/formation
+   + Collision logic
+ - MathUtils and DrawContext implementation
+   + Rect/Circle/Line/Point2D and its methods
+   + Transform/Reverse Transform/context rotation, offset
+ - Collision object implementation
+ - Local and screen space implementation
+
+Extra credits: N/A
+
+We did not use AI.
