@@ -3,7 +3,6 @@
 #include "Player.h"
 #include <iostream>
 #include <math.h>
-#include <numbers>
 
 Bullet::Bullet(CMPUT350::Point2D location, CMPUT350::Point2D heading, bool player) : isAlive(true), globalLocation(location), heading(heading), player(player), length(20.0f), width(3.0f), location(0, 0) {}
 
@@ -22,7 +21,7 @@ void Bullet::Initialize(CMPUT350::GameContext* context) {
         heading = CMPUT350::Point2D(0, -1);
     }
     heading.Normalize();
-    rotation = std::atan2(heading.y, heading.x) + std::numbers::pi / 2.0f;
+    rotation = std::atan2(heading.y, heading.x) + 3.1415926535 / 2.0f;
     bulletBody.p1 = location;
     bulletBody.p2 = CMPUT350::Point2D(location.x, -length);
     selfShapes.push_back(bulletBody);

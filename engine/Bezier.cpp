@@ -1,10 +1,9 @@
-#include <span>
 #include <cmath>
 
 #include "Bezier.h"
 #include "MathUtil.h"
 #include <vector>
-#include <span>
+#include "span.hpp"
 
 namespace CMPUT350 {
 
@@ -40,7 +39,7 @@ Point2D Bezier::GetPoint(const std::vector<Point2D>& pts, float t) {
     if (t > segCount || t < 0) { throw std::out_of_range("t out of range."); }
     if (pts.size() % 3 != 1) { throw std::runtime_error("invalid number of point."); }
 
-    std::span spanPts = std::span<const Point2D>(pts);
+    tcb::span spanPts = tcb::span<const Point2D>(pts);
     if (t <= 1.0f) {
         spanPts = spanPts.subspan(0, 4);
     } else {
@@ -83,7 +82,7 @@ Point2D Bezier::GetSlope(const std::vector<Point2D>& pts, float t) {
         throw std::runtime_error("invalid number of point.");
     }
 
-    std::span spanPts = std::span<const Point2D>(pts);
+    tcb::span spanPts = tcb::span<const Point2D>(pts);
     if (t <= 1.0f) {
         spanPts = spanPts.subspan(0, 4);
     } else {

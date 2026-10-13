@@ -34,6 +34,7 @@ bool Enemy3::Attack(CMPUT350::GameContext* context, const CMPUT350::Point2D& tar
             return false;
         }
     }
+    return false;
 }
 
 void Enemy3::RenderBackground(CMPUT350::GameContext* context) {
